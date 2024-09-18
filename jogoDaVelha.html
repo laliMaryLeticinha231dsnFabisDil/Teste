@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Velha</title>
+    <link rel="stylesheet" href="jogoDaVelha.css">
+</head>
+
+<body>
+<div class="onda">
+    
+</div>
+    <div class="container">
+        <h1>Jogo da Velha</h1>
+
+        <!-- Página de escolha do modo de jogo -->
+        <div id="chooseModePage">
+            <h3>Escolha o modo</h3>
+            <button id="twoPlayers">2 Jogadores</button>
+            <button id="vsBot">Vs Robô</button>
+        </div>
+
+        <!-- Página de escolha do jogador (X ou O) -->
+        <div id="choosePlayerPage" class="hidden">
+            <h3>Escolha o jogador</h3>
+            <button id="chooseX">X</button>
+            <button id="chooseO">O</button>
+        </div>
+
+        <!-- Tabuleiro do jogo -->
+        <div id="gameBoardPage" class="hidden">
+            <div id="gameBoard" class="board">
+                <div class="cell" data-index="0"></div>
+                <div class="cell" data-index="1"></div>
+                <div class="cell" data-index="2"></div>
+                <div class="cell" data-index="3"></div>
+                <div class="cell" data-index="4"></div>
+                <div class="cell" data-index="5"></div>
+                <div class="cell" data-index="6"></div>
+                <div class="cell" data-index="7"></div>
+                <div class="cell" data-index="8"></div>
+            </div>
+
+            <!-- Resultado -->
+            <div id="result" class="hidden">
+                <h2 id="winner"></h2>
+                <button id="playAgain">Jogar Novamente</button>
+                <button id="exit">Sair do Jogo</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const chooseModePage = document.getElementById("chooseModePage");
+        const choosePlayerPage = document.getElementById("choosePlayerPage");
+        const gameBoardPage = document.getElementById("gameBoardPage");
+        const gameBoard = document.getElementById("gameBoard");
+        const cells = document.querySelectorAll(".cell");
+        const resultDiv = document.getElementById("result");
+        const winnerText = document.getElementById("winner");
+        const playAgainBtn = document.getElementById("playAgain");
+        const exitBtn = document.getElementById("exit");
+
+        let currentPlayer = 'X';
+        let board = ["", "", "", "", "", "", "", "", ""];
+        let isBotPlaying = false;
+        let playerSymbol = 'X';
+        let botSymbol = 'O';
+        let gameOver = false;
+
+        // Escolher o modo (2 jogadores ou vs Robô)
+        document.getElementById("twoPlayers").addEventListener("click", () => {
+            isBotPlaying = false;
+            showPlayerChoice();
+        });
+
+        document.getElementById("vsBot").addEventListener("click", () => {
+            isBotPlaying = true;
+            showPlayerChoice();
+        });
+
+        // Função para mostrar a página de escolha de jogador (X ou O)
+        function showPlayerChoice() {
+            chooseModePage.classList.add("hidden");
+            choosePlayerPage.classList.remove("hidden");
+        }
+
+        // Escolher X ou O
+        document.getElementById("chooseX").addEventListener("click", () => choosePlayer('X'));
+        document.getElementById("chooseO").addEventListener("click", () => choosePlayer('O'));
+
+        function choosePlayer(symbol) {
+            playerSymbol = symbol;
+            botSymbol = (symbol === 'X') ? 'O' : 'X';
+            choosePlayerPage.classList.add("hidden");
+            gameBoardPage.classList.remove("hidden");
+            resetGame();
+        }
+
+        // Clique em uma célula
+        cells.forEach(cell => {
+            cell.addEventListener("click", handleCellClick);
+        });
+
+        function handleCellClick(e) {
+            const index = e.target.getAttribute("data-index");
+            if (board[index] === "" && !gameOver) {
+                board[index] = currentPlayer;
+                e.target.textContent = currentPlayer;
+                checkWinner();
+                if (!gameOver && isBotPlaying && currentPlayer === playerSymbol) {
+                    setTimeout(botMove, 500);
+                } else {
+                    currentPlayer = (currentPlayer === 'X') ? 'O' : 'X';
+                }
+            }
+        }
+
+        // Movimento do robô
+        function botMove() {
+            let emptyCells = board.map((val, index) => val === "" ? index : null).filter(val => val !== null);
+            let randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+            board[randomIndex] = botSymbol;
+            cells[randomIndex].textContent = botSymbol;
+            checkWinner();
+            if (!gameOver) {
+                currentPlayer = playerSymbol;
+            }
+        }
+
+        // Checar vencedor
+        function checkWinner() {
+            const winningCombinations = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Linhas
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Colunas
+                [0, 4, 8], [2, 4, 6]             // Diagonais
+            ];
+
+            winningCombinations.forEach(combination => {
+                const [a, b, c] = combination;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    gameOver = true;
+                    showWinner(currentPlayer);
+                }
+            });
+
+            if (!board.includes("") && !gameOver) {
+                showWinner("Empate");
+            }
+        }
+
+        // Exibir ganhador
+        function showWinner(winner) {
+            if (winner === "Empate") {
+                winnerText.textContent = "Empate!";
+            } else {
+                winnerText.textContent = `Ganhador: ${winner}`;
+            }
+            resultDiv.classList.remove("hidden");
+            gameBoard.classList.add("hidden");
+        }
+
+        // Reiniciar o jogo
+        playAgainBtn.addEventListener("click", () => {
+            resetGame();
+            resultDiv.classList.add("hidden");
+            gameBoard.classList.remove("hidden");
+        });
+
+        exitBtn.addEventListener("click", () => {
+            resultDiv.classList.add("hidden");
+            chooseModePage.classList.remove("hidden");
+            gameBoardPage.classList.add("hidden");
+        });
+
+        function resetGame() {
+            board = ["", "", "", "", "", "", "", "", ""];
+            gameOver = false;
+            currentPlayer = playerSymbol;
+            cells.forEach(cell => {
+                cell.textContent = "";
+            });
+        }
+
+    </script>
+</body>
+
+</html>
