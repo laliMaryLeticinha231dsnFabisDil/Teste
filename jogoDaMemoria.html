@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="jogoDamemoria.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!-- Link para os ícones -->
+    <title>Jogo da Memória</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="timer">
+            <span id="iconeRelogio" class="material-icons clock-icon">timer</span>
+            <span id="time">0s</span>
+        </div>
+        <div class="memory-game">
+            <div class="card" data-card="img1"><img src="img/img1.png" alt="Imagem 1"></div>
+            <div class="card" data-card="img1"><img src="img/img1.png" alt="Imagem 1"></div>
+            <div class="card" data-card="img2"><img src="img/img2.png" alt="Imagem 2"></div>
+            <div class="card" data-card="img2"><img src="img/img2.png" alt="Imagem 2"></div>
+            <div class="card" data-card="img3"><img src="img/img3.png" alt="Imagem 3"></div>
+            <div class="card" data-card="img3"><img src="img/img3.png" alt="Imagem 3"></div>
+            <div class="card" data-card="img4"><img src="img/img4.png" alt="Imagem 4"></div>
+            <div class="card" data-card="img4"><img src="img/img4.png" alt="Imagem 4"></div>
+            <div class="card" data-card="img5"><img src="img/img5.png" alt="Imagem 5"></div>
+            <div class="card" data-card="img5"><img src="img/img5.png" alt="Imagem 5"></div>
+            <div class="card" data-card="img6"><img src="img/img6.png" alt="Imagem 6"></div>
+            <div class="card" data-card="img6"><img src="img/img6.png" alt="Imagem 6"></div>
+            <div class="card" data-card="img7"><img src="img/img7.png" alt="Imagem 7"></div>
+            <div class="card" data-card="img7"><img src="img/img7.png" alt="Imagem 7"></div>
+            <div class="card" data-card="img8"><img src="img/img8.png" alt="Imagem 8"></div>
+            <div class="card" data-card="img8"><img src="img/img8.png" alt="Imagem 8"></div>
+            <div class="card" data-card="img9"><img src="img/img9.png" alt="Imagem 9"></div>
+            <div class="card" data-card="img9"><img src="img/img9.png" alt="Imagem 9"></div>
+            <div class="card" data-card="img10"><img src="img/img10.png" alt="Imagem 10"></div>
+            <div class="card" data-card="img10"><img src="img/img10.png" alt="Imagem 10"></div>
+            <div class="card" data-card="img11"><img src="img/img11.png" alt="Imagem 11"></div>
+            <div class="card" data-card="img11"><img src="img/img11.png" alt="Imagem 11"></div>
+            <div class="card" data-card="img12"><img src="img/img12.png" alt="Imagem 12"></div>
+            <div class="card" data-card="img12"><img src="img/img12.png" alt="Imagem 12"></div>
+            <div class="card" data-card="img13"><img src="img/img13.png" alt="Imagem 13"></div>
+            <div class="card" data-card="img13"><img src="img/img13.png" alt="Imagem 13"></div>
+            <div class="card" data-card="img14"><img src="img/img14.png" alt="Imagem 14"></div>
+            <div class="card" data-card="img14"><img src="img/img14.png" alt="Imagem 14"></div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span id="modal-message"></span>
+            <div class="modal-buttons">
+                <button id="restart-button">Reiniciar Jogo</button>
+                <button id="home-button">Voltar ao Início</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+  const cards = document.querySelectorAll('.card');
+let hasFlippedCard = false;
+let lockBoard = false;
+let firstCard, secondCard;
+let timeElapsed = 0;
+let timerInterval;
+const modal = document.getElementById('modal');
+const modalMessage = document.getElementById('modal-message');
+const restartButton = document.getElementById('restart-button');
+const homeButton = document.getElementById('home-button');
+
+function flipCard() {
+    if (lockBoard) return;
+    if (this === firstCard) return;
+
+    this.classList.add('show');
+    
+    if (!hasFlippedCard) {
+        hasFlippedCard = true;
+        firstCard = this;
+        return;
+    }
+
+    secondCard = this;
+    checkForMatch();
+}
+
+function checkForMatch() {
+    const isMatch = firstCard.dataset.card === secondCard.dataset.card;
+
+    isMatch ? disableCards() : unflipCards();
+
+    if (document.querySelectorAll('.card.show').length === 12) {
+        clearInterval(timerInterval);
+        showModal();
+    }
+}
+
+function disableCards() {
+    firstCard.removeEventListener('click', flipCard);
+    secondCard.removeEventListener('click', flipCard);
+    resetBoard();
+}
+
+function unflipCards() {
+    lockBoard = true;
+
+    setTimeout(() => {
+        firstCard.classList.remove('show');
+        secondCard.classList.remove('show');
+        resetBoard();
+    }, 1500);
+}
+
+function resetBoard() {
+    [hasFlippedCard, lockBoard] = [false, false];
+    [firstCard, secondCard] = [null, null];
+}
+
+function startTimer() {
+    timerInterval = setInterval(() => {
+        timeElapsed++;
+        document.getElementById('time').innerText = `${timeElapsed}s`;
+    }, 1000);
+}
+
+function showModal() {
+    modal.style.display = "block";
+    modalMessage.innerText = `Parabéns, você conseguiu em ${timeElapsed}s!`;
+}
+
+function restartGame() {
+    timeElapsed = 0;
+    document.getElementById('time').innerText = '0s';
+    cards.forEach(card => {
+        card.classList.remove('show');
+        card.addEventListener('click', flipCard);
+    });
+    shuffle();
+    startTimer();
+    modal.style.display = "none";
+}
+
+function goHome() {
+    // Aqui você pode redirecionar para a página inicial ou fazer outra ação
+    alert("Voltar ao início");
+}
+
+function shuffle() {
+    cards.forEach(card => {
+        let randomPos = Math.floor(Math.random() * 12);
+        card.style.order = randomPos;
+    });
+}
+
+function init() {
+    shuffle();
+    cards.forEach(card => card.addEventListener('click', flipCard));
+    startTimer();
+}
+
+// Eventos dos botões do modal
+restartButton.addEventListener('click', restartGame);
+homeButton.addEventListener('click', goHome);
+
+init();
+
+
+    </script>
+</body>
+
+</html>

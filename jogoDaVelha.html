@@ -103,13 +103,14 @@
         function reiniciarJogo() {
             tabuleiroEstado = ["", "", "", "", "", "", "", "", ""];
             jogoFinalizado = false;
-            jogadorAtual = jogadorSimbolo;
+            jogadorAtual = jogadorSimbolo;  // Reinicia o jogador para o jogador escolhido
             celulas.forEach(celula => {
-                celula.textContent = "";
-                celula.classList.remove('X', 'O'); // Limpa as classes X e O
+                celula.textContent = "";  // Limpa o texto dentro das células
+                celula.classList.remove('X', 'O');  // Remove as classes que indicam X e O
             });
-            modal.classList.add("oculto"); // Esconde o modal
+            modal.classList.add("oculto");  // Esconde o modal
         }
+
 
         // Função para mostrar o modal
         function mostrarModal(vencedor) {

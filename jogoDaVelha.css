@@ -248,11 +248,26 @@ button:hover {
 
 /* CSS para a contagem de vitórias */
 #contagem {
-    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+#contagem h3 {
+    font-size: 1.5em;
+    color: #4CAF50; /* Cor verde agradável */
     text-align: center;
 }
 
 #contagem p {
-    font-size: 18px;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0 20px;
+    text-align: center;
 }
+
+#contagem span {
+    color: #FF5722; /* Destaque para o número de vitórias */
+}
+
 
