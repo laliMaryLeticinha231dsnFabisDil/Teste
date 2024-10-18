@@ -5,25 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jogo da Velha</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="jogoDaVelha.css">
 </head>
 
 <body>
 
     <header>
+        <div class="voltar"id="voltarParaInicio">
+            <span class="material-icons" id="voltar">arrow_back</span>
+        </div>
         <div class="onda-container">
-            <svg viewBox="0 0 1440 290">
+            <svg viewBox="0 0 1440 250">
                 <path fill="#C2D898" fill-opacity="1"
                     d="M0,0L60,26.7C120,53,240,107,360,122.7C480,139,600,117,720,106.7C840,96,960,96,1080,122.7C1200,149,1320,203,1380,229.3L1440,256L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z">
                 </path>
             </svg>
-        </div>
+        </div>   
     </header>
 
     <main>
-        <div class="voltar">
-            <button id="voltarParaInicio">Voltar</button>
-        </div>
+
         <div class="container">
             <!-- Página de escolha do modo de jogo -->
             <div id="paginaEscolhaModo">
@@ -61,7 +63,6 @@
                 </div>
                 <!-- Contagem de Vitórias -->
                 <div id="contagem">
-                    <h3>Contagem de Vitórias</h3>
                     <p>X: <span id="contagemX">0</span></p>
                     <p>O: <span id="contagemO">0</span></p>
                 </div>
@@ -111,13 +112,12 @@
             modal.classList.add("oculto");  // Esconde o modal
         }
 
-
         // Função para mostrar o modal
         function mostrarModal(vencedor) {
             if (vencedor === "Empate") {
                 modalVencedor.textContent = "Empate!";
             } else {
-                modalVencedor.textContent = `Ganhador: ${vencedor}`;
+                modalVencedor.textContent = `Ganhador: ${vencedor}`; // Correção aqui
             }
             modal.classList.remove("oculto");
         }
@@ -161,37 +161,31 @@
                     e.target.classList.add(jogadorAtual);
                     e.target.textContent = jogadorAtual;
                     verificarVencedor();
-                    jogadorAtual = (jogadorAtual === 'X') ? 'O' : 'X';
+                    if (!jogoFinalizado && jogoBot && jogadorAtual === jogadorSimbolo) {
+                        jogadorAtual = botSimbolo; // Muda para o bot
+                        setTimeout(jogarComoBot, 500); // Espera 500ms antes do bot jogar
+                    } else {
+                        jogadorAtual = (jogadorAtual === 'X') ? 'O' : 'X';
+                    }
                 }
             });
         });
 
-        // Jogar novamente
-        jogarNovamenteModalBtn.addEventListener("click", () => {
-            reiniciarJogo();
-        });
+        // Função do bot para jogar
+        function jogarComoBot() {
+            const indicesVazios = tabuleiroEstado.map((celula, index) => celula === "" ? index : null).filter(index => index !== null);
+            const indexAleatorio = indicesVazios[Math.floor(Math.random() * indicesVazios.length)];
+            if (indexAleatorio !== undefined) {
+                tabuleiroEstado[indexAleatorio] = jogadorAtual;
+                celulas[indexAleatorio].classList.add(jogadorAtual);
+                celulas[indexAleatorio].textContent = jogadorAtual;
+                verificarVencedor();
+                jogadorAtual = (jogadorAtual === 'X') ? 'O' : 'X'; // Troca de jogador
+            }
+        }
 
-        // Sair do jogo
-        sairModalBtn.addEventListener("click", () => {
-            modal.classList.add("oculto");
-            paginaEscolhaModo.classList.remove("oculto");
-            paginaTabuleiro.classList.add("oculto");
-            document.querySelector('.onda-container').classList.remove('oculto');
-            voltarParaInicioBtn.classList.remove('oculto');
-        });
-
-        // Voltar para a página inicial
-        voltarParaInicioBtn.addEventListener("click", () => {
-            paginaEscolhaModo.classList.remove("oculto");
-            paginaEscolhaJogador.classList.add("oculto");
-            paginaTabuleiro.classList.add("oculto");
-            document.querySelector('.onda-container').classList.remove('oculto');
-            voltarParaInicioBtn.classList.add('oculto');
-        });
-
-        // Escolher modo de jogo (2 jogadores ou vs bot)
+        // Funções dos botões
         document.getElementById("doisJogadores").addEventListener("click", () => {
-            jogoBot = false;
             paginaEscolhaModo.classList.add("oculto");
             paginaEscolhaJogador.classList.remove("oculto");
         });
@@ -202,29 +196,34 @@
             paginaEscolhaJogador.classList.remove("oculto");
         });
 
-        // Escolher jogador X ou O
         document.getElementById("escolherX").addEventListener("click", () => {
             jogadorSimbolo = 'X';
             botSimbolo = 'O';
-            iniciarJogo();
+            paginaEscolhaJogador.classList.add("oculto");
+            paginaTabuleiro.classList.remove("oculto");
+            reiniciarJogo();
         });
 
         document.getElementById("escolherO").addEventListener("click", () => {
             jogadorSimbolo = 'O';
             botSimbolo = 'X';
-            iniciarJogo();
-        });
-
-        // Função para iniciar o jogo
-        function iniciarJogo() {
-            jogadorAtual = jogadorSimbolo;
             paginaEscolhaJogador.classList.add("oculto");
             paginaTabuleiro.classList.remove("oculto");
-            document.querySelector('.onda-container').classList.add('oculto');
-        }
+            reiniciarJogo();
+        });
 
+        jogarNovamenteModalBtn.addEventListener("click", () => {
+            reiniciarJogo();
+        });
+
+        sairModalBtn.addEventListener("click", () => {
+            window.location.reload(); // Reinicia a página
+        });
+
+        voltarParaInicioBtn.addEventListener("click", () => {
+            window.location.reload(); // Reinicia a página
+        });
     </script>
-
 </body>
 
 </html>

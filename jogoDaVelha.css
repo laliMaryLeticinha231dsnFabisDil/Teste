@@ -1,7 +1,16 @@
 /* Geral */
-body {
+* {
     margin: 0;
     padding: 0;
+    border: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     background-color: #ffffff;
     font-family: Nunito, sans-serif;
 }
@@ -16,27 +25,39 @@ body {
 .header {
     width: 100%;
 }
-  
+
 
 .imagemDaVelha {
     position: relative;
-    z-index: 1; /* valor baixo para ficar abaixo da onda */
+    z-index: 1;
+    /* valor baixo para ficar abaixo da onda */
 }
 
-.onda-container { 
+.onda-container {
     position: relative;
-    z-index: 10; /* valor alto para ficar acima da imagem */
+    z-index: 8;
+    /* valor alto para ficar acima da imagem */
 }
 
 .onda-container svg {
-    margin-top: -7vh;
     width: 100%;
-    transform: scaleY(-0.75);
+    transform: scaleY(-1);
 }
 
 /* Botão Voltar */
-.voltar button {
-    margin-top: 30vh;
+
+
+.voltar {
+    position: absolute;
+    z-index: 10;
+    color: #ffffff;
+    background-color: #91af50;
+    width: 8vh;
+    height: 4vh;
+    border-radius: 1vh;
+    margin-top: 0.75vh;
+    margin-left: 1vh;
+    cursor: pointer;
 }
 
 /* Ocultar */
@@ -48,7 +69,7 @@ body {
 .container {
     margin: 50px auto;
     max-width: 400px;
-    margin-top: 10vh;
+    margin-top: 50vh;
 }
 
 /* Título */
@@ -59,11 +80,13 @@ body {
     color: #3F3F3F;
 }
 
-.botoesInicio{
+.botoesInicio {
     display: flex;
+    margin-top: 2vh;
 }
 
-#doisJogadores, #vsBot {
+#doisJogadores,
+#vsBot {
     box-shadow: 0px 4px 8px rgba(48, 48, 48, 0.2);
     justify-content: space-between;
     width: 214px;
@@ -82,20 +105,27 @@ body {
     justify-content: center;
     align-items: center;
 }
-#paginaEscolhaJogador{
+
+#paginaEscolhaJogador {
     margin-top: -50vh;
     text-align: center;
 }
-.titulo-EscolhaXouO{
+
+.titulo-EscolhaXouO {
     font-size: 5vh;
 }
-#escolherX, #escolherO {
-    transition: transform 0.3s ease; /* Transição suave ao passar o mouse */
+
+#escolherX,
+#escolherO {
+    transition: transform 0.3s ease;
+    /* Transição suave ao passar o mouse */
 }
 
 /* Efeito ao passar o mouse */
-#escolherX:hover, #escolherO:hover {
-    transform: scale(1.1) translateY(-10px); /* Aumenta o tamanho e move para cima */
+#escolherX:hover,
+#escolherO:hover {
+    transform: scale(1.1) translateY(-10px);
+    /* Aumenta o tamanho e move para cima */
 }
 
 
@@ -106,21 +136,20 @@ body {
     grid-template-rows: repeat(3, 100px);
     margin: 20px;
     padding: 10px;
-    background-color: #BBD18B;
+    background-color: #a3b974;
     border-radius: 20px;
     justify-content: center;
 }
 
-/* Tabuleiro */
-.tabuleiro {
-    display: grid;
-    grid-template-columns: repeat(3, 100px);
-    grid-template-rows: repeat(3, 100px);
-    width: 300px;
-    height: 300px;
-    background-color: transparent;
-    margin-top: 30px;
-    background-color: #BBD18B;
+#tabuleiro{
+    margin-top: -50vh;
+}
+/* CONTAGEM */
+#contagemX{
+    color: #F56462;
+}
+#contagemO{
+    color: #FFA53B;
 }
 
 /* Células individuais com bordas específicas */
@@ -129,8 +158,10 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 3rem;
-    font-family: 'Nunito', sans-serif; /* Fonte do texto */
-    font-weight: bold; /* Deixa o texto em negrito */
+    font-family: 'Nunito', sans-serif;
+    /* Fonte do texto */
+    font-weight: bold;
+    /* Deixa o texto em negrito */
 
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -140,34 +171,48 @@ body {
 }
 
 .celula.X {
-    color: #F56462; /* Vermelho para o "X" */
+    color: #F56462;
+    /* Vermelho para o "X" */
 }
 
 .celula.O {
-    color: #FFA53B; /* Azul para o "O" */
+    color: #FFA53B;
+    /* Azul para o "O" */
 }
 
 
 
-.celula:nth-child(1), .celula:nth-child(2), .celula:nth-child(3) {
-    border-bottom: 4px solid #ffffff; /* Borda inferior */
+.celula:nth-child(1),
+.celula:nth-child(2),
+.celula:nth-child(3) {
+    border-bottom: 4px solid #ffffff;
+    /* Borda inferior */
 }
 
-.celula:nth-child(1), .celula:nth-child(4), .celula:nth-child(7) {
-    border-right: 4px solid #ffffff; /* Borda direita */
+.celula:nth-child(1),
+.celula:nth-child(4),
+.celula:nth-child(7) {
+    border-right: 4px solid #ffffff;
+    /* Borda direita */
 }
 
-.celula:nth-child(4), .celula:nth-child(5), .celula:nth-child(6) {
-    border-bottom: 4px solid #ffffff; /* Borda inferior (meio) */
+.celula:nth-child(4),
+.celula:nth-child(5),
+.celula:nth-child(6) {
+    border-bottom: 4px solid #ffffff;
+    /* Borda inferior (meio) */
 }
 
-.celula:nth-child(2), .celula:nth-child(5), .celula:nth-child(8) {
-    border-right: 4px solid #ffffff; /* Borda direita (meio) */
+.celula:nth-child(2),
+.celula:nth-child(5),
+.celula:nth-child(8) {
+    border-right: 4px solid #ffffff;
+    /* Borda direita (meio) */
 }
 
 
 .celula:hover {
-    background-color: #5f815f;
+    background-color: #a7b6a9;
 }
 
 /* Botões */
@@ -188,7 +233,8 @@ button:hover {
 /* Escolha do Jogador */
 
 
-#escolherX, #escolherO {
+#escolherX,
+#escolherO {
     cursor: pointer;
     margin: 10vh;
 }
@@ -205,12 +251,10 @@ button:hover {
 /*  QUANTAS VEZES CADA UM GANHOU */
 #contagem {
     text-align: center;
-    margin: 20px 0;
-}
+    margin-top: 20vh;
+    justify-content: center;
+    align-items: center;
 
-#contagem h3 {
-    font-size: 2rem;
-    margin-bottom: 10px;
 }
 
 #contagem p {
@@ -253,21 +297,66 @@ button:hover {
     margin: 20px 0;
 }
 
-#contagem h3 {
-    font-size: 1.5em;
-    color: #4CAF50; /* Cor verde agradável */
-    text-align: center;
-}
+
 
 #contagem p {
     font-size: 1.2em;
     font-weight: bold;
     margin: 0 20px;
+
     text-align: center;
 }
 
-#contagem span {
-    color: #FF5722; /* Destaque para o número de vitórias */
+
+
+
+#paginaTabuleiro {
+    margin-top: -20vh;
+    align-items: center;
+    justify-content: center;
 }
 
 
+
+@media (max-width: 768px) {
+
+    /* Ajustes para telas menores que 768px */
+
+
+    .container {
+        margin-top: 70vh;
+    }
+
+    .onda-container svg {
+        margin-top: 1vh;
+        transform: scaleY(-1.24);
+    }
+
+    #paginaTabuleiro {
+        margin-top: -40vh;
+        align-items: center;
+        justify-content: center;
+    }
+    .imagemJogoDaVelha img{
+        width: 20vh;
+        height: 26vh;
+    }
+
+    .titulo-EscolhaModo{
+        font-size: 3.35vh;
+    }
+
+    #doisJogadores, #vsBot{
+        width: 20vh;
+        height: 7vh;
+        align-items: center;
+        font-size: 2.30vh;
+    }
+    #escolherX, #escolherO{
+        width: 14vh;
+        height: 12vh;
+    }
+    .titulo-EscolhaXouO{
+        font-size: 4.45vh;
+    }
+}
