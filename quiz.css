@@ -1,53 +1,126 @@
 * {
     margin: 0;
     padding: 0;
-box-sizing: border-box;
+    box-sizing: border-box;
 }
-
-body{
+@font-face {
+    font-family: poppins;
+    src: url(font/Poppins-Regular.ttf);
+}
+body {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: #0c192c;
-}
-.container{
-    position: relative;
-    width: 100%;
-    height: 100vh;
+    background: radial-gradient(circle, #f162aa, #f7bbd9);
     overflow: hidden;
 }
 
-.bubbles{
-    position: relative;
+
+
+/* PARTE BRANCA */
+main  {
     display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.fundo-branco-quiz h3, .imagem-quiz{
+    padding-top: 2vh;
+}
+.imagem-quiz{
+    margin-top: 1vh ;
+}
+.fundo-branco-quiz {
+    z-index: 2;
+    width: 80vh;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    height: 90vh;
+    background-color: white;
+    align-items: center;
+    border-radius: 10px;
+    text-align: center;
+}
+.fundo-branco-quiz h3{
+    font-family: poppins;
+    font-weight: 500;
+    
+   
+}
+.alternativas {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+    margin-top: 4vh;
+   
+}
+.alternativa {
+    padding: 10px;
+    border-radius: 15px;
+    width: 60vh;
+    height: 7vh;
+    background-color: #FFD7A9;
+    border: none;
+    cursor: pointer;
+    font-family: "poppins";
+    font-weight: 500;
+    font-size: 2.50vh;
+    text-align: left;
+    transition: background-color 0.3s;
+}
+.alternativa.correta {
+    background-color: green;
+    color: white;
+}
+.alternativa.errada {
+    background-color: red;
+    color: white;
+}
+.botao-pular {
+    margin-top: 15px;
+}
+.hidden {
+    display: none;
+}/* Estilo do Modal */
+.modal {
+    display: none; /* Oculto por padrão */
+    position: fixed; /* Fixo na tela */
+    z-index: 1; /* Fica acima dos outros elementos */
+    left: 0;
+    top: 0;
+    width: 100%; /* Largura total */
+    height: 100%; /* Altura total */
+    overflow: auto; /* Ativa rolagem se necessário */
+    background-color: rgb(0, 0, 0); /* Cor de fundo */
+    background-color: rgba(0, 0, 0, 0.4); /* Fundo com opacidade */
+    padding-top: 60px; /* Espaço acima do modal */
 }
 
-.buble span{
-    position: relative;
-    min-width: 30px;
-    height: 30px;
-    box-shadow:  0 9 9 10px #4fc3dc,
-    0 0 50px #4fc3dc,
-    0 0 100px #4fc3dc;
-    margin: 0 4px;
-    border-radius: 50%;
-    animation: animate 15s linear infinite;
-    animation-duration: calc(75s/ var(--i));
+.modal-conteudo {
+    background-color: #fefefe; /* Cor do conteúdo */
+    margin: 5% auto; /* Margem automática para centralizar */
+    padding: 20px;
+    border: 1px solid #888; /* Borda do modal */
+    width: 80%; /* Largura do modal */
+    border-radius: 5px; /* Bordas arredondadas */
 }
 
-.bubbles span:nth-child(even){
-    background: #ff2d75 ;
-    box-shadow: 0 0 0 10 px #ff2d7544,
-    0 0 50px #ff2d75
-    0 0 100px #ff2d75;
+.fechar {
+    color: #aaa; /* Cor do botão de fechar */
+    float: right; /* Flutua à direita */
+    font-size: 28px; /* Tamanho da fonte */
+    font-weight: bold; /* Negrito */
 }
 
-@keyframes animate{
-    0%{
-        transform: translateY(100vh) scale(0);
-    }
-    100%{
-        transform: translateY(-10vh) scale(1);
-    }
+.fechar:hover,
+.fechar:focus {
+    color: red; /* Cor ao passar o mouse */
+    text-decoration: none; /* Sem sublinhado */
+    cursor: pointer; /* Cursor como ponteiro */
+}
+
+.imagem-pequena {
+    width: 50%; /* Ajuste a largura conforme necessário */
+    height: auto; /* Mantém a proporção da imagem */
 }

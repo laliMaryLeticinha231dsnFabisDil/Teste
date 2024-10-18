@@ -1,3 +1,168 @@
+<!-- <!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Geografia</title>
+    <link rel="stylesheet" href="quiz.css">
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="fundo-branco-quiz">
+
+            <h3 id="pergunta">Quem ganhou a copa do mundo de 2022?</h3>
+            <img class="imagem-quiz" src="" alt="Imagem da pergunta" id="imagemPergunta">
+
+            <div class="alternativas">
+                <button class="alternativa" data-letra="A">Alternativa A</button>
+                <button class="alternativa" data-letra="B">Alternativa B</button>
+                <button class="alternativa" data-letra="C">Alternativa C</button>
+                <button class="alternativa" data-letra="D">Alternativa D</button>
+                <button class="alternativa" data-letra="E">Alternativa E</button>
+            </div>
+            <button id="pular" class="botao-pular">Pular Pergunta</button>
+        </div>
+
+        Modal 
+        <div id="modalResultado" class="modal">
+            <div class="modal-conteudo">
+                <span class="fechar" id="fecharModal">&times;</span>
+                <h3>Resultados</h3>
+                <p id="tempoFinal"></p>
+                <p id="acertos"></p>
+                <h4>Histórico:</h4>
+                <p id="historico"></p>
+                <button id="reiniciar">Reiniciar Quiz</button>
+            </div>
+        </div>
+    </div> 
+
+    <script>
+        const perguntas = [
+            { pergunta: "Quem ganhou a copa do mundo de 2022?", alternativas: ["França", "Argentina", "Brasil", "Alemanha", "Espanha"], resposta: 1, imagem: "copa2022.png" },
+         { pergunta: "Qual é a capital da França?", alternativas: ["Berlim", "Madrid", "Paris", "Lisboa", "Roma"], resposta: 2, imagem: "populacao.png" },
+            { pergunta: "Qual país tem a maior população do mundo?", alternativas: ["Índia", "Estados Unidos", "China", "Brasil", "Rússia"], resposta: 2 },
+            { pergunta: "Qual é o maior deserto do mundo?", alternativas: ["Sahara", "Gobi", "Kalahari", "Ártico", "Antártico"], resposta: 0 },
+            { pergunta: "Qual é a capital do Brasil?", alternativas: ["São Paulo", "Brasília", "Rio de Janeiro", "Salvador", "Fortaleza"], resposta: 1 },
+            { pergunta: "Em que continente fica a Austrália?", alternativas: ["África", "América", "Ásia", "Oceania", "Europa"], resposta: 3 },
+            { pergunta: "Qual é o rio mais longo do mundo?", alternativas: ["Nilo", "Amazonas", "Yangtze", "Mississippi", "Ganges"], resposta: 0 },
+            { pergunta: "Qual país é conhecido como a terra do sol nascente?", alternativas: ["China", "Japão", "Coreia do Sul", "Tailândia", "Vietnã"], resposta: 1 },
+            { pergunta: "Qual é a montanha mais alta do mundo?", alternativas: ["K2", "Kangchenjunga", "Makalu", "Everest", "Lhotse"], resposta: 3 },
+            { pergunta: "Qual é a capital da Itália?", alternativas: ["Milão", "Roma", "Nápoles", "Florença", "Turim"], resposta: 1 },
+            { pergunta: "Qual é o menor país do mundo?", alternativas: ["Mônaco", "Vaticano", "San Marino", "Nauru", "Malta"], resposta: 1 },
+            { pergunta: "Qual é a língua oficial do Brasil?", alternativas: ["Espanhol", "Inglês", "Francês", "Português", "Italiano"], resposta: 3 },
+            { pergunta: "Qual é a maior floresta tropical do mundo?", alternativas: ["Floresta Amazônica", "Floresta do Congo", "Floresta da Nova Guiné", "Floresta Boreal", "Floresta Atlântica"], resposta: 0 },
+            { pergunta: "Qual cidade é conhecida como a Big Apple?", alternativas: ["Los Angeles", "Chicago", "Miami", "Nova Iorque", "Las Vegas"], resposta: 3 },
+            { pergunta: "Qual é o maior oceano do mundo?", alternativas: ["Atlântico", "Índico", "Ártico", "Pacífico", "Antártico"], resposta: 3 },
+            { pergunta: "Qual é a capital da Rússia?", alternativas: ["Moscovo", "São Petersburgo", "Kiev", "Minque", "Tashkent"], resposta: 0 }
+        ];
+
+        let perguntaAtual = 0;
+        let acertos = 0;
+        let tempoRestante = 180; // 3 minutos
+        let timer;
+
+        // Função para iniciar o cronômetro
+        function iniciarCronometro() {
+            timer = setInterval(() => {
+                tempoRestante--;
+                if (tempoRestante <= 0) {
+                    clearInterval(timer);
+                    finalizarQuiz();
+                }
+            }, 1000);
+        }
+
+        // Função para carregar a pergunta
+        function carregarPergunta() {
+            const perguntaElement = document.getElementById("pergunta");
+            const imagemElement = document.getElementById("imagemPergunta");
+            const alternativasElement = document.querySelectorAll(".alternativa");
+
+            if (perguntaAtual < perguntas.length) {
+                const perguntaAtualData = perguntas[perguntaAtual];
+                perguntaElement.textContent = perguntaAtualData.pergunta;
+                imagemElement.src = `img/${perguntaAtualData.imagem}`; // Atualize para usar o nome da imagem específico de cada pergunta
+
+                alternativasElement.forEach((alternativa, index) => {
+                    alternativa.textContent = perguntaAtualData.alternativas[index];
+                    alternativa.classList.remove('correta', 'errada');
+                    alternativa.onclick = () => verificarResposta(index);
+                });
+            } else {
+                finalizarQuiz();
+            }
+        }
+        // Função para verificar a resposta
+        function verificarResposta(indice) {
+            const alternativasElement = document.querySelectorAll(".alternativa");
+            if (indice === perguntas[perguntaAtual].resposta) {
+                acertos++;
+                alternativasElement[indice].classList.add('correta'); // Marca como correta
+            } else {
+                alternativasElement[indice].classList.add('errada'); // Marca como errada
+                alternativasElement[perguntas[perguntaAtual].resposta].classList.add('correta'); // Mostra a correta
+            }
+            perguntaAtual++;
+            setTimeout(carregarPergunta, 1000); // Muda para a próxima pergunta após 1 segundo
+        }
+
+        // Função para finalizar o quiz
+        function finalizarQuiz() {
+            clearInterval(timer);
+            document.querySelector(".fundo-branco-quiz").classList.add("hidden");
+            mostrarResultadoModal();
+        }
+
+        // Função para mostrar o modal de resultados
+        function mostrarResultadoModal() {
+            const modal = document.getElementById("modalResultado");
+            const tempoFinal = document.getElementById("tempoFinal");
+            const acertosElement = document.getElementById("acertos");
+            const historicoElement = document.getElementById("historico");
+
+            tempoFinal.textContent = `Você completou o quiz em ${180 - tempoRestante} segundos.`;
+            acertosElement.textContent = `Você acertou ${acertos} de ${perguntas.length} perguntas.`;
+            historicoElement.textContent = `Última vez: ${acertos} acertos em ${180 - tempoRestante} segundos.`;
+
+            modal.style.display = "block"; // Mostra o modal
+        }
+
+        // Fechar o modal
+        document.getElementById("fecharModal").onclick = function () {
+            document.getElementById("modalResultado").style.display = "none";
+        }
+
+        // Reiniciar o quiz
+        document.getElementById("reiniciar").onclick = function () {
+            perguntaAtual = 0;
+            acertos = 0;
+            tempoRestante = 180; // Reinicia o tempo
+            document.getElementById("resultado").classList.add("hidden");
+            document.querySelector(".fundo-branco-quiz").classList.remove("hidden");
+            document.getElementById("modalResultado").style.display = "none"; // Esconde o modal
+            iniciarCronometro();
+            carregarPergunta();
+        };
+
+        // Iniciar o quiz
+        iniciarCronometro();
+        carregarPergunta();
+    </script> -->
+<!-- </body>
+
+</html> -->
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -5,45 +170,156 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fundo Animado</title>
+    <title>Quiz de Geografia</title>
     <link rel="stylesheet" href="quiz.css">
 </head>
 
 <body>
     <div class="container">
-        <div class="bubbles">
-            <span style="--i:11"></span>
-            <span style="--i:12"></span>
-            <span style="--i:25"></span>
-            <span style="--i:14"></span>
-            <span style="--i:22"></span>
-            <span style="--i:11"></span>
-            <span style="--i:10"></span>
-            <span style="--i:12"></span>
-            <span style="--i:15"></span>
-            <span style="--i:13"></span>
-            <span style="--i:15"></span>
-            <span style="--i:20"></span>
-            <span style="--i:12"></span>
-            <span style="--i:22"></span>
-            <span style="--i:23"></span>
-            <span style="--i:11"></span>
-            <span style="--i:14"></span>
-            <span style="--i:11"></span>
-            <span style="--i:11"></span>
-            <span style="--i:11"></span>
-            <span style="--i:11"></span>
-            <span style="--i:11"></span>
-            <span style="--i:11"></span>
-            <span style="--i:11"></span>
-            <span style="--i:11"></span>
-            <span style="--i:11"></span>
-            <span style="--i:11"></span>
-            <span style="--i:11"></span>
-            <span style="--i:11"></span>
+        <div class="fundo-branco-quiz">
+            <h3 id="pergunta">Quem ganhou a copa do mundo de 2022?</h3>
+            <img class="imagem-quiz" src="" alt="Imagem da pergunta" id="imagemPergunta">
+
+            <div class="alternativas">
+                <button class="alternativa" data-letra="A">Alternativa A</button>
+                <button class="alternativa" data-letra="B">Alternativa B</button>
+                <button class="alternativa" data-letra="C">Alternativa C</button>
+                <button class="alternativa" data-letra="D">Alternativa D</button>
+                <button class="alternativa" data-letra="E">Alternativa E</button>
+            </div>
+            <button id="pular" class="botao-pular">Pular Pergunta</button>
+        </div>
+
+        <!-- Modal -->
+        <div id="modalResultado" class="modal">
+            <div class="modal-conteudo">
+                <span class="fechar" id="fecharModal">&times;</span>
+                <h3>Resultados</h3>
+                <p id="tempoFinal"></p>
+                <p id="acertos"></p>
+                <h4>Histórico:</h4>
+                <p id="historico"></p>
+                <button id="reiniciar">Reiniciar Quiz</button>
+            </div>
         </div>
     </div>
 
+    <script>
+        const perguntas = [
+            { pergunta: "Quem ganhou a copa do mundo de 2022?", alternativas: ["França", "Argentina", "Brasil", "Alemanha", "Espanha"], resposta: 1, imagem: "copa2022.png" },
+            { pergunta: "Qual é a capital da França?", alternativas: ["Berlim", "Madrid", "Paris", "Lisboa", "Roma"], resposta: 2, imagem: "franca.png" },
+            { pergunta: "Qual país tem a maior população do mundo?", alternativas: ["Índia", "Estados Unidos", "China", "Brasil", "Rússia"], resposta: 2, imagem: "populacao.png" },
+            { pergunta: "Qual é o maior deserto do mundo?", alternativas: ["Sahara", "Gobi", "Kalahari", "Ártico", "Antártico"], resposta: 0, imagem: "deserto.png" },
+            { pergunta: "Qual é a capital do Brasil?", alternativas: ["São Paulo", "Brasília", "Rio de Janeiro", "Salvador", "Fortaleza"], resposta: 1, imagem: "saoPaulo.png" },
+            { pergunta: "Em que continente fica a Austrália?", alternativas: ["África", "América", "Ásia", "Oceania", "Europa"], resposta: 3,  imagem: "oceania.png"  },
+            { pergunta: "Qual é o rio mais longo do mundo?", alternativas: ["Nilo", "Amazonas", "Yangtze", "Mississippi", "Ganges"], resposta: 0, imagem: "rioNilo.png"  },
+            { pergunta: "Qual país é conhecido como a terra do sol nascente?", alternativas: ["China", "Japão", "Coreia do Sul", "Tailândia", "Vietnã"], resposta: 1,imagem: "solJapao.png"  },
+            { pergunta: "Qual é a montanha mais alta do mundo?", alternativas: ["K2", "Kangchenjunga", "Makalu", "Everest", "Lhotse"], resposta: 3, imagem: "monteEvereste.png" },
+            { pergunta: "Qual é a capital da Itália?", alternativas: ["Milão", "Roma", "Nápoles", "Florença", "Turim"], resposta: 1, imagem: "roma.png" },
+            { pergunta: "Qual é o menor país do mundo?", alternativas: ["Mônaco", "Vaticano", "San Marino", "Nauru", "Malta"], resposta: 1, imagem: "vaticano.png" },
+            { pergunta: "Qual é a língua oficial do Brasil?", alternativas: ["Espanhol", "Inglês", "Francês", "Português", "Italiano"], resposta: 3, imagem: "portugues.png" },
+            { pergunta: "Qual é a maior floresta tropical do mundo?", alternativas: ["Floresta Amazônica", "Floresta do Congo", "Floresta da Nova Guiné", "Floresta Boreal", "Floresta Atlântica"], resposta: 0, imagem: "floresta.png" },
+            { pergunta: "Qual cidade é conhecida como a Big Apple?", alternativas: ["Los Angeles", "Chicago", "Miami", "Nova Iorque", "Las Vegas"], resposta: 3, imagem: "novaIorque.png" },
+            { pergunta: "Qual é o maior oceano do mundo?", alternativas: ["Atlântico", "Índico", "Ártico", "Pacífico", "Antártico"], resposta: 3, imagem: "oceano.png" },
+            { pergunta: "Qual é a capital da Rússia?", alternativas: ["Moscovo", "São Petersburgo", "Kiev", "Minque", "Tashkent"], resposta: 0, imagem: "capitalRussia.png" }
+        ];
+
+        let perguntaAtual = 0;
+        let acertos = 0;
+        let tempoRestante = 0; // Cronômetro de controle do tempo
+        let timer;
+
+        // Função para iniciar o cronômetro
+        function iniciarCronometro() {
+            tempoRestante = 0;
+            timer = setInterval(() => {
+                tempoRestante++;
+            }, 1000);
+        }
+
+        // Função para carregar a pergunta
+        function carregarPergunta() {
+            const perguntaElement = document.getElementById("pergunta");
+            const imagemElement = document.getElementById("imagemPergunta");
+            const alternativasElement = document.querySelectorAll(".alternativa");
+
+            if (perguntaAtual < perguntas.length) {
+                const perguntaAtualData = perguntas[perguntaAtual];
+                perguntaElement.textContent = perguntaAtualData.pergunta;
+                imagemElement.src = `img/${perguntaAtualData.imagem}`; // Atualize para usar o nome da imagem específico de cada pergunta
+
+                alternativasElement.forEach((alternativa, index) => {
+                    alternativa.textContent = perguntaAtualData.alternativas[index];
+                    alternativa.classList.remove('correta', 'errada');
+                    alternativa.onclick = () => verificarResposta(index);
+                });
+            } else {
+                finalizarQuiz();
+            }
+        }
+
+       
+        // Função para verificar a resposta
+        function verificarResposta(indice) {
+            const alternativasElement = document.querySelectorAll(".alternativa");
+            if (indice === perguntas[perguntaAtual].resposta) {
+                acertos++;
+                alternativasElement[indice].classList.add('correta'); // Marca como correta
+            } else {
+                alternativasElement[indice].classList.add('errada'); // Marca como errada
+                alternativasElement[perguntas[perguntaAtual].resposta].classList.add('correta'); // Mostra a correta
+            }
+            perguntaAtual++;
+            setTimeout(carregarPergunta, 1000); // Muda para a próxima pergunta após 1 segundo
+        }
+
+        // Função para finalizar o quiz
+        function finalizarQuiz() {
+            clearInterval(timer);
+            document.querySelector(".fundo-branco-quiz").classList.add("hidden");
+            mostrarResultadoModal();
+        }
+
+        // Função para mostrar o modal de resultados
+        function mostrarResultadoModal() {
+            const modal = document.getElementById("modalResultado");
+            const tempoFinal = document.getElementById("tempoFinal");
+            const acertosElement = document.getElementById("acertos");
+            const historicoElement = document.getElementById("historico");
+
+            tempoFinal.textContent = `Você completou o quiz em ${tempoRestante} segundos.`;
+            acertosElement.textContent = `Você acertou ${acertos} de ${perguntas.length} perguntas.`;
+            historicoElement.textContent = `Última vez: ${acertos} acertos em ${tempoRestante} segundos.`;
+
+            modal.style.display = "block"; // Mostra o modal
+        }
+
+        // Fechar o modal
+        document.getElementById("fecharModal").onclick = function () {
+            document.getElementById("modalResultado").style.display = "none";
+        }
+
+        // Pular pergunta
+        document.getElementById("pular").onclick = function () {
+            perguntaAtual++;
+            carregarPergunta();
+        }
+
+        // Reiniciar o quiz
+        document.getElementById("reiniciar").onclick = function () {
+            perguntaAtual = 0;
+            acertos = 0;
+            tempoRestante = 0; // Reinicia o tempo
+            document.querySelector(".fundo-branco-quiz").classList.remove("hidden");
+            document.getElementById("modalResultado").style.display = "none"; // Esconde o modal
+            iniciarCronometro();
+            carregarPergunta();
+        };
+
+        // Iniciar o quiz
+        iniciarCronometro();
+        carregarPergunta();
+    </script>
 </body>
 
 </html>
