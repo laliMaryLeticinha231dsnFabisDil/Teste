@@ -12,7 +12,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: radial-gradient(circle, #f162aa, #f7bbd9);
+    background: radial-gradient(circle, #FFA193, #FBD6D1);
     overflow: hidden;
 }
 
@@ -26,7 +26,7 @@ main  {
 
 }
 .fundo-branco-quiz h3, .imagem-quiz{
-    padding-top: 2vh;
+    padding-top: 4vh;
 }
 .imagem-quiz{
     margin-top: 1vh ;
@@ -35,7 +35,7 @@ main  {
     z-index: 2;
     width: 80vh;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    height: 95vh;
+    height: 97vh;
     background-color: white;
     align-items: center;
     border-radius: 10px;
@@ -52,7 +52,7 @@ main  {
     flex-direction: column;
     gap: 14px;
     align-items: center;
-    margin-top: 4vh;
+    margin-top: 3vh;
    
 }
 .alternativa {
@@ -77,19 +77,21 @@ main  {
     background-color: red;
     color: white;
 }
-.botao-pular {
+
+.botao-pular, #buttonVoltar {
     width: 20vh;
     height: 5vh;
-    margin-top: 15px;
+    margin-top: 30px;
     border-radius: 15px;
     background-color: #fcb25e;
     border: none;
     cursor: pointer;
     font-family: "poppins";
     font-weight: 500;
-    font-size: 2.50vh;
+    font-size: 2.30vh;
     
 }
+
 .hidden {
     display: none;
 }/* Estilo do Modal */
@@ -150,4 +152,66 @@ main  {
 .imagem-pequena {
     width: 50%; /* Ajuste a largura conforme necessário */
     height: auto; /* Mantém a proporção da imagem */
+}
+
+
+@media screen and (max-width: 365px) {
+    body {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        align-items: center;
+        padding: 20px;
+        overflow-y: auto; /* Permite rolagem vertical para conteúdo longo */
+    }
+
+    .fundo-branco-quiz {
+        width: 90%; /* Reduz a largura para caber em telas pequenas */
+        height: 105vh; /* Permite que a altura se ajuste ao conteúdo */
+        padding: 10px;
+    }
+    .imagem-quiz{
+        width: 36vh;
+    }
+
+    h3 {
+        font-size: 2.5vh; /* Ajuste de fonte para perguntas */
+        padding-top: 2vh;
+    }
+
+    .alternativas {
+        gap: 10px;
+    }
+
+    .alternativa {
+      width: 30vh;
+        font-size: 2.2vh; /* Ajuste no tamanho da fonte */
+        height: 7vh; /* Deixa a altura flexível conforme o conteúdo */
+        padding: 8px;
+        font-size: 1.8vh;
+    }
+
+    .botao-pular, #buttonVoltar {
+        width: 30vh;
+        font-size: 2.2vh; /* Ajuste no tamanho da fonte */
+        height: 5vh; 
+    }
+
+    .modal-conteudo {
+        width: 80%; /* Modal ocupa menos espaço horizontal */
+        height: auto; /* Altura ajustável ao conteúdo */
+    }
+
+    #reiniciar, #paginaInicialJogos {
+        width: 100%; /* Botões ocupam toda a largura do modal */
+        font-size: 2.3vh; /* Fonte dos botões no modal */
+    }
+
+    .fechar {
+        font-size: 24px;
+    }
+
+    .imagem-pequena {
+        width: 100%; /* Ajuste de largura para a imagem */
+    }
 }

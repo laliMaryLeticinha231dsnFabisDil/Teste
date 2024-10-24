@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -24,7 +22,10 @@
                 <button class="alternativa" data-letra="D">Alternativa D</button>
                 <button class="alternativa" data-letra="E">Alternativa E</button>
             </div>
-            <button id="pular" class="botao-pular">Pular Pergunta</button>
+            <div class="botoes">
+                <button id="buttonVoltar">Sair do Jogo</button>
+                <button id="pular" class="botao-pular">Pular Pergunta</button>
+            </div>
         </div>
 
         <!-- Modal -->
@@ -43,29 +44,11 @@
     </div>
 
     <script>
-        const perguntas = [
-            { pergunta: "Quem ganhou a copa do mundo de 2022?", alternativas: ["França", "Argentina", "Brasil", "Alemanha", "Espanha"], resposta: 1, imagem: "copa2022.png" },
-            { pergunta: "Qual é a capital da França?", alternativas: ["Berlim", "Madrid", "Paris", "Lisboa", "Roma"], resposta: 2, imagem: "franca.png" },
-            { pergunta: "Qual país tem a maior população do mundo?", alternativas: ["Índia", "Estados Unidos", "China", "Brasil", "Rússia"], resposta: 2, imagem: "populacao.png" },
-            { pergunta: "Qual é o maior deserto do mundo?", alternativas: ["Sahara", "Gobi", "Kalahari", "Ártico", "Antártico"], resposta: 0, imagem: "deserto.png" },
-            { pergunta: "Qual é a capital do Brasil?", alternativas: ["São Paulo", "Brasília", "Rio de Janeiro", "Salvador", "Fortaleza"], resposta: 1, imagem: "saoPaulo.png" },
-            { pergunta: "Em que continente fica a Austrália?", alternativas: ["África", "América", "Ásia", "Oceania", "Europa"], resposta: 3,  imagem: "oceania.png"  },
-            { pergunta: "Qual é o rio mais longo do mundo?", alternativas: ["Nilo", "Amazonas", "Yangtze", "Mississippi", "Ganges"], resposta: 0, imagem: "rioNilo.png"  },
-            { pergunta: "Qual país é conhecido como a terra do sol nascente?", alternativas: ["China", "Japão", "Coreia do Sul", "Tailândia", "Vietnã"], resposta: 1,imagem: "solJapao.png"  },
-            { pergunta: "Qual é a montanha mais alta do mundo?", alternativas: ["K2", "Kangchenjunga", "Makalu", "Everest", "Lhotse"], resposta: 3, imagem: "monteEvereste.png" },
-            { pergunta: "Qual é a capital da Itália?", alternativas: ["Milão", "Roma", "Nápoles", "Florença", "Turim"], resposta: 1, imagem: "roma.png" },
-            { pergunta: "Qual é o menor país do mundo?", alternativas: ["Mônaco", "Vaticano", "San Marino", "Nauru", "Malta"], resposta: 1, imagem: "vaticano.png" },
-            { pergunta: "Qual é a língua oficial do Brasil?", alternativas: ["Espanhol", "Inglês", "Francês", "Português", "Italiano"], resposta: 3, imagem: "portugues.png" },
-            { pergunta: "Qual é a maior floresta tropical do mundo?", alternativas: ["Floresta Amazônica", "Floresta do Congo", "Floresta da Nova Guiné", "Floresta Boreal", "Floresta Atlântica"], resposta: 0, imagem: "floresta.png" },
-            { pergunta: "Qual cidade é conhecida como a Big Apple?", alternativas: ["Los Angeles", "Chicago", "Miami", "Nova Iorque", "Las Vegas"], resposta: 3, imagem: "novaIorque.png" },
-            { pergunta: "Qual é o maior oceano do mundo?", alternativas: ["Atlântico", "Índico", "Ártico", "Pacífico", "Antártico"], resposta: 3, imagem: "oceano.png" },
-            { pergunta: "Qual é a capital da Rússia?", alternativas: ["Moscovo", "São Petersburgo", "Kiev", "Minque", "Tashkent"], resposta: 0, imagem: "capitalRussia.png" }
-        ];
-
         let perguntaAtual = 0;
         let acertos = 0;
         let tempoRestante = 0; // Cronômetro de controle do tempo
         let timer;
+        let perguntas = []; // Array para armazenar as perguntas da categoria escolhida
 
         // Função para iniciar o cronômetro
         function iniciarCronometro() {
@@ -73,6 +56,18 @@
             timer = setInterval(() => {
                 tempoRestante++;
             }, 1000);
+        }
+
+        // Função para carregar perguntas do JSON
+        function carregarPerguntas(categoria) {
+            fetch('perguntas.json')
+                .then(response => response.json())
+                .then(data => {
+                    perguntas = data[categoria]; // Carrega perguntas da categoria escolhida
+                    carregarPergunta(); // Carrega a primeira pergunta
+                    iniciarCronometro(); // Inicia o cronômetro ao carregar as perguntas
+                })
+                .catch(error => console.error('Erro ao carregar perguntas:', error));
         }
 
         // Função para carregar a pergunta
@@ -96,7 +91,6 @@
             }
         }
 
-       
         // Função para verificar a resposta
         function verificarResposta(indice) {
             const alternativasElement = document.querySelectorAll(".alternativa");
@@ -125,9 +119,13 @@
             const acertosElement = document.getElementById("acertos");
             const historicoElement = document.getElementById("historico");
 
-            tempoFinal.textContent = `Você completou o quiz em ${tempoRestante} segundos.`;
+            // Formatar o tempo para minutos e segundos
+            const minutos = Math.floor(tempoRestante / 60);
+            const segundos = tempoRestante % 60;
+
+            tempoFinal.textContent = `Você completou o quiz em ${minutos} minutos e ${segundos} segundos.`;
             acertosElement.textContent = `Você acertou ${acertos} de ${perguntas.length} perguntas.`;
-            historicoElement.textContent = `Última vez: ${acertos} acertos em ${tempoRestante} segundos.`;
+            historicoElement.textContent = `Última vez: ${acertos} acertos em ${minutos} minutos e ${segundos} segundos.`;
 
             modal.style.display = "block"; // Mostra o modal
         }
@@ -154,9 +152,15 @@
             carregarPergunta();
         };
 
-        // Iniciar o quiz
-        iniciarCronometro();
-        carregarPergunta();
+        // Função para obter parâmetros da URL
+        function obterCategoria() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('categoria');
+        }
+
+        // Iniciar o quiz ao carregar a página com a categoria selecionada
+        const categoriaSelecionada = obterCategoria();
+        carregarPerguntas(categoriaSelecionada);
     </script>
 </body>
 

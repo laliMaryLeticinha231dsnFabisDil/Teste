@@ -1,0 +1,117 @@
+{
+  "geografia": [
+    {
+      "pergunta": "Quem ganhou a copa do mundo de 2022?",
+      "imagem": "copa2022.png",
+      "alternativas": [
+          "Brasil",
+          "Argentina",
+          "França",
+          "Alemanha",
+          "Espanha"
+      ],
+      "resposta": 1
+    },
+    {
+      "pergunta": "Qual é a capital da França?",
+      "alternativas": ["Berlim", "Madrid", "Paris", "Lisboa", "Roma"],
+      "resposta": 2,
+      "imagem": "franca.png"
+    },
+    {
+      "pergunta": "Qual país tem a maior população do mundo?",
+      "alternativas": ["Índia", "Estados Unidos", "China", "Brasil", "Rússia"],
+      "resposta": 2,
+      "imagem": "populacao.png"
+  },
+  {
+      "pergunta": "Qual é o maior deserto do mundo?",
+      "alternativas": ["Sahara", "Gobi", "Kalahari", "Ártico", "Antártico"],
+      "resposta": 0,
+      "imagem": "deserto.png"
+  },
+  {
+      "pergunta": "Qual é a capital do Brasil?",
+      "alternativas": ["São Paulo", "Brasília", "Rio de Janeiro", "Salvador", "Fortaleza"],
+      "resposta": 1,
+      "imagem": "saoPaulo.png"
+  },
+  {
+      "pergunta": "Em que continente fica a Austrália?",
+      "alternativas": ["África", "América", "Ásia", "Oceania", "Europa"],
+      "resposta": 3,
+      "imagem": "oceania.png"
+  },
+  {
+      "pergunta": "Qual é o rio mais longo do mundo?",
+      "alternativas": ["Nilo", "Amazonas", "Yangtze", "Mississippi", "Ganges"],
+      "resposta": 0,
+      "imagem": "rioNilo.png"
+  },
+  {
+      "pergunta": "Qual país é conhecido como a terra do sol nascente?",
+      "alternativas": ["China", "Japão", "Coreia do Sul", "Tailândia", "Vietnã"],
+      "resposta": 1,
+      "imagem": "solJapao.png"
+  },
+  {
+      "pergunta": "Qual é a montanha mais alta do mundo?",
+      "alternativas": ["K2", "Kangchenjunga", "Makalu", "Everest", "Lhotse"],
+      "resposta": 3,
+      "imagem": "monteEvereste.png"
+  },
+  {
+      "pergunta": "Qual é a capital da Itália?",
+      "alternativas": ["Milão", "Roma", "Nápoles", "Florença", "Turim"],
+      "resposta": 1,
+      "imagem": "roma.png"
+  },
+  {
+      "pergunta": "Qual é o menor país do mundo?",
+      "alternativas": ["Mônaco", "Vaticano", "San Marino", "Nauru", "Malta"],
+      "resposta": 1,
+      "imagem": "vaticano.png"
+  },
+  {
+      "pergunta": "Qual é a língua oficial do Brasil?",
+      "alternativas": ["Espanhol", "Inglês", "Francês", "Português", "Italiano"],
+      "resposta": 3,
+      "imagem": "portugues.png"
+  },
+  {
+      "pergunta": "Qual é a maior floresta tropical do mundo?",
+      "alternativas": ["Floresta Amazônica", "Floresta do Congo", "Floresta da Nova Guiné", "Floresta Boreal", "Floresta Atlântica"],
+      "resposta": 0,
+      "imagem": "floresta.png"
+  },
+  {
+      "pergunta": "Qual cidade é conhecida como a Big Apple?",
+      "alternativas": ["Los Angeles", "Chicago", "Miami", "Nova Iorque", "Las Vegas"],
+      "resposta": 3,
+      "imagem": "novaIorque.png"
+  },
+  {
+      "pergunta": "Qual é o maior oceano do mundo?",
+      "alternativas": ["Atlântico", "Índico", "Ártico", "Pacífico", "Antártico"],
+      "resposta": 3,
+      "imagem": "oceano.png"
+  },
+  {
+      "pergunta": "Qual é a capital da Rússia?",
+      "alternativas": ["Moscovo", "São Petersburgo", "Kiev", "Minque", "Tashkent"],
+      "resposta": 0,
+      "imagem": "capitalRussia.png"
+  }
+  
+  ],
+  "historia": [
+    {
+      "pergunta": "Qual foi a primeira civilização?",
+      "alternativas": ["Egípcia", "Suméria", "Grega", "Romana", "Chinesa"],
+      "resposta": 1,
+      "imagem": "sumeria.png"
+    }
+  
+  ]
+ 
+}
