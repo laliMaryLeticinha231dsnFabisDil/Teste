@@ -4,7 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="icon" href="img/logo.png">
     <title>Categoria</title>
+
 </head>
 
 <style>
@@ -32,6 +35,8 @@
         flex-direction: column;
         gap: 10px;
     }
+
+
 
     .linha {
         height: 0.20vh;
@@ -149,28 +154,65 @@
         /* Cor mais escura ao clicar */
     }
 
-button{
-    cursor: pointer;
-}
+    button {
+        cursor: pointer;
+    }
 
     h2 {
         font-family: 'Nunito';
         margin-left: 2vh;
     }
+
+
+#voltar{
+    display: none;
+}
+
+
+
+    @media (max-width: 768px) {
+        .container-botao button {
+            width: 80vw;
+            height: 8vh;
+            font-size: 2.5vh;
+        }
+
+        h2 {
+            font-size: 3vh;
+            text-align: center;
+        }
+
+        .imagemGirassol {
+            display: none;
+        }
+
+        #voltar{
+    display: inline;
+}
+    }
 </style>
 
 <body>
     <header>
-        <h2>Escolha a categoria</h2>
-        <div class="linha"></div>
+        <div class="voltar" id="voltarParaInicio">
+            <span class="material-icons" id="voltar">arrow_back</span>
+
+            <h2>Escolha a categoria</h2>
+            <div class="linha"></div>
+        </div>
     </header>
     <main>
         <div class="container-botao">
-            <button class="temaGeografia" onclick="window.location.href='quiz.html?categoria=geografia';">GEOGRAFIA</button>
-            <button class="temaHistoria" onclick="window.location.href='quiz.html?categoria=historia';">HISTÓRIA</button>
-            <button class="temaBiologia" onclick="window.location.href='quiz.html?categoria=biologia';">BIOLOGIA</button>
-            <button class="temaMatematica" onclick="window.location.href='quiz.html?categoria=matematica';">MATEMÁTICA</button>
-            <button class="temaPortugues" onclick="window.location.href='quiz.html?categoria=portugues';">PORTUGUÊS</button>
+            <button class="temaGeografia"
+                onclick="window.location.href='quiz.html?categoria=geografia';">GEOGRAFIA</button>
+            <button class="temaHistoria"
+                onclick="window.location.href='quiz.html?categoria=historia';">HISTÓRIA</button>
+            <button class="temaBiologia"
+                onclick="window.location.href='quiz.html?categoria=biologia';">BIOLOGIA</button>
+            <button class="temaMatematica"
+                onclick="window.location.href='quiz.html?categoria=matematica';">MATEMÁTICA</button>
+            <button class="temaPortugues"
+                onclick="window.location.href='quiz.html?categoria=portugues';">PORTUGUÊS</button>
             <button class="temaArtes" onclick="window.location.href='quiz.html?categoria=artes';">ARTES</button>
 
         </div>

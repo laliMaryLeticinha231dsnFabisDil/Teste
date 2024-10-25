@@ -35,15 +35,20 @@ main  {
     z-index: 2;
     width: 80vh;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    height: 97vh;
+    height: 98vh;
     background-color: white;
     align-items: center;
     border-radius: 10px;
     text-align: center;
 }
 .fundo-branco-quiz h3{
+    text-align: center;
+    align-items: center;
     font-family: poppins;
     font-weight: 500;
+   max-width: 100%;
+   
+   
     
    
 }
@@ -65,7 +70,7 @@ main  {
     cursor: pointer;
     font-family: "poppins";
     font-weight: 500;
-    font-size: 2.50vh;
+    font-size: 2.20vh;
     text-align: left;
     transition: background-color 0.3s;
 }
@@ -211,6 +216,7 @@ main  {
         font-size: 24px;
     }
 
+    
     .imagem-pequena {
         width: 100%; /* Ajuste de largura para a imagem */
     }
