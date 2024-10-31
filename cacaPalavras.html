@@ -62,8 +62,6 @@
         transition: transform 0.3s;
     }
 
- 
-
     /* Tabuleiro do caça-palavras */
     .board {
         display: grid;
@@ -93,6 +91,15 @@
 
     .selected {
         background-color: #cce5ff;
+    }
+
+    /* Estilo para palavra encontrada */
+    .word-item {
+        font-size: 1.5rem;
+    }
+
+    .found-word {
+        color: #4CAF50; /* verde para palavras encontradas */
     }
     </style>
 </head>
@@ -222,11 +229,11 @@
     function updateWordList(word) {
       const wordItem = Array.from(document.querySelectorAll('.word-item')).find(item => item.textContent === word);
       if (wordItem) {
-        wordItem.style.textDecoration = 'line-through';
+        wordItem.classList.add('found-word');
       }
     }
 
     setupBoard();
   </script>
 </body>
-</html>
+</html> 
