@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caça-Palavras</title>
+  <style>
+    /* Fonte e estilo do corpo */
+    @font-face {
+        font-family: Nunito;
+        src: url(font/Nunito-VariableFont_wght.ttf);
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+        font-family: 'Nunito', sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+    }
+
+    header {
+        text-align: center;
+        margin-top: 5vh;
+        width: 100%;
+    }
+
+    h2 {
+        font-size: 3vh;
+        color: #555;
+        font-weight: 700;
+    }
+
+    .linha {
+        height: 0.2vh;
+        width: 90%;
+        background-color: #CACACA;
+        margin: 1vh auto;
+    }
+
+    /* Botões de seleção de palavras */
+    .container-botao {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1vh;
+        margin-top: 8vh;
+        width: 100%;
+    }
+
+    .container-botao button {
+        width: 50vh;
+        height: 10vh;
+        font-size: 3vh;
+        color: white;
+        font-weight: 700;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: transform 0.3s;
+    }
+
+ 
+
+    /* Tabuleiro do caça-palavras */
+    .board {
+        display: grid;
+        grid-template-columns: repeat(10, 3rem);
+        gap: 0.2rem;
+        margin-top: 4vh;
+        text-align: center;
+    }
+
+    .board div {
+        width: 3rem;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ddd;
+        font-size: 2rem;
+        font-weight: 700;
+        cursor: pointer;
+        color: #555;
+        background-color: #f4f4f4;
+    }
+
+    .found {
+        background-color: #b3ffb3;
+    }
+
+    .selected {
+        background-color: #cce5ff;
+    }
+    </style>
+</head>
+<body>
+  <h1>Caça-Palavras</h1>
+  <div class="board" id="board"></div>
+  <ul class="words" id="words"></ul>
+  <button onclick="nextRound()">Próxima Rodada</button>
+
+  <script>
+    const rounds = [
+      ["PALAVRA", "JOGO", "CODIGO", "EXEMPLO", "RODADA", "DESAFIO", "LETRA", "TEXTO"],
+      ["OUTRA", "FUNCAO", "SCRIPT", "PROGRAMAR", "EVENTO", "DESENVOLVE", "CONSOLE", "LAYOUT"],
+      // Adicione mais rodadas até completar as 10
+    ];
+    let currentRound = 0;
+    const gridSize = 10;
+    let letters = [];
+    let foundWords = [];
+    let isSelecting = false;
+    let selectedCells = [];
+
+    function setupBoard() {
+      const board = document.getElementById('board');
+      board.innerHTML = '';
+      foundWords = [];
+      letters = Array(gridSize * gridSize).fill('');
+
+      placeWords(rounds[currentRound]);
+
+      letters.forEach((letter, index) => {
+        const cell = document.createElement('div');
+        cell.textContent = letter || String.fromCharCode(65 + Math.floor(Math.random() * 26));
+        cell.dataset.index = index;
+        cell.onmousedown = startSelection;
+        cell.onmouseenter = continueSelection;
+        cell.onmouseup = endSelection;
+        board.appendChild(cell);
+      });
+
+      displayWords();
+    }
+
+    function placeWords(words) {
+      words.forEach(word => {
+        let placed = false;
+        while (!placed) {
+          const direction = Math.floor(Math.random() * 3);
+          const row = Math.floor(Math.random() * gridSize);
+          const col = Math.floor(Math.random() * gridSize);
+
+          if (canPlaceWord(row, col, direction, word)) {
+            for (let i = 0; i < word.length; i++) {
+              const index = getIndex(row, col, direction, i);
+              letters[index] = word[i];
+            }
+            placed = true;
+          }
+        }
+      });
+    }
+
+    function canPlaceWord(row, col, direction, word) {
+      for (let i = 0; i < word.length; i++) {
+        const newRow = row + (direction === 0 ? i : direction === 2 ? i : 0);
+        const newCol = col + (direction === 1 ? i : direction === 2 ? i : 0);
+        if (newRow >= gridSize || newCol >= gridSize || letters[newRow * gridSize + newCol]) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function getIndex(row, col, direction, i) {
+      switch (direction) {
+        case 0: return (row + i) * gridSize + col;           // vertical
+        case 1: return row * gridSize + (col + i);           // horizontal
+        case 2: return (row + i) * gridSize + (col + i);     // diagonal
+      }
+    }
+
+    function displayWords() {
+      const wordList = document.getElementById('words');
+      wordList.innerHTML = '';
+      rounds[currentRound].forEach(word => {
+        const wordItem = document.createElement('li');
+        wordItem.textContent = word;
+        wordItem.classList.add('word-item');
+        wordList.appendChild(wordItem);
+      });
+    }
+
+    function nextRound() {
+      if (currentRound < rounds.length - 1) {
+        currentRound++;
+        setupBoard();
+      } else {
+        alert("Jogo Concluído!");
+      }
+    }
+
+    function startSelection(event) {
+      isSelecting = true;
+      selectedCells = [event.target];
+      event.target.classList.add('selected');
+    }
+
+    function continueSelection(event) {
+      if (isSelecting && !selectedCells.includes(event.target)) {
+        selectedCells.push(event.target);
+        event.target.classList.add('selected');
+      }
+    }
+
+    function endSelection() {
+      isSelecting = false;
+      const selectedWord = selectedCells.map(cell => cell.textContent).join('');
+      if (rounds[currentRound].includes(selectedWord)) {
+        selectedCells.forEach(cell => cell.classList.add('found'));
+        foundWords.push(selectedWord);
+        updateWordList(selectedWord);
+      }
+      selectedCells.forEach(cell => cell.classList.remove('selected'));
+      selectedCells = [];
+    }
+
+    function updateWordList(word) {
+      const wordItem = Array.from(document.querySelectorAll('.word-item')).find(item => item.textContent === word);
+      if (wordItem) {
+        wordItem.style.textDecoration = 'line-through';
+      }
+    }
+
+    setupBoard();
+  </script>
+</body>
+</html>
