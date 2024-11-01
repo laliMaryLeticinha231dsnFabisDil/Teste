@@ -5,116 +5,130 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Caça-Palavras</title>
   <style>
-    /* Fonte e estilo do corpo */
     @font-face {
-        font-family: Nunito;
-        src: url(font/Nunito-VariableFont_wght.ttf);
-    }
-
+    font-family: 'Nunito';
+    src: url(font/Nunito-ExtraBold.ttf);
+}
     body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 0;
-        font-family: 'Nunito', sans-serif;
-        background-color: #f9f9f9;
-        color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background-color: #ffd9fe88;
+      color: #333;
+      margin: 0;
+      padding: 1rem;
     }
 
-    header {
-        text-align: center;
-        margin-top: 5vh;
-        width: 100%;
+    h1 {
+      font-size: 2rem;
+      font-family: 'Nunito';
+      color: #555;
+      margin-bottom: 1rem;
     }
 
-    h2 {
-        font-size: 3vh;
-        color: #555;
-        font-weight: 700;
-    }
-
-    .linha {
-        height: 0.2vh;
-        width: 90%;
-        background-color: #CACACA;
-        margin: 1vh auto;
-    }
-
-    /* Botões de seleção de palavras */
-    .container-botao {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1vh;
-        margin-top: 8vh;
-        width: 100%;
-    }
-
-    .container-botao button {
-        width: 50vh;
-        height: 10vh;
-        font-size: 3vh;
-        color: white;
-        font-weight: 700;
-        border: none;
-        border-radius: 15px;
-        cursor: pointer;
-        transition: transform 0.3s;
-    }
-
-    /* Tabuleiro do caça-palavras */
     .board {
-        display: grid;
-        grid-template-columns: repeat(10, 3rem);
-        gap: 0.2rem;
-        margin-top: 4vh;
-        text-align: center;
-    }
+  display: grid;
+  grid-template-columns: repeat(10, 2.5rem);
+  gap: 0.25rem;
+}
 
-    .board div {
-        width: 3rem;
-        height: 3rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid #ddd;
-        font-size: 2rem;
-        font-weight: 700;
-        cursor: pointer;
-        color: #555;
-        background-color: #f4f4f4;
-    }
+.board div {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ddd; /* Cor da borda */
+  border-radius: 8px; /* Bordas arredondadas */
+  cursor: pointer;
+  font-size: 1.5rem; /* Aumenta o tamanho da fonte */
+  background-color: #ffffff; /* Cor de fundo padrão */
+  transition: background-color 0.3s, transform 0.3s; /* Adiciona transições suaves */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave para as células */
+}
+
+.board div:hover {
+  background-color: #f0f8ff; /* Cor de fundo ao passar o mouse */
+  transform: scale(1.1); /* Efeito de zoom ao passar o mouse */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra mais intensa ao passar o mouse */
+}
+
+.board div.selecionada {
+  background-color: #cce5ff; /* Cor de fundo quando selecionada */
+  box-shadow: inset 0 0 10px rgba(0, 123, 255, 0.5); /* Efeito de brilho quando selecionada */
+}
+
 
     .found {
-        background-color: #b3ffb3;
+      color: #fff;
+      font-weight: bold;
     }
 
     .selected {
-        background-color: #cce5ff;
+      background-color: #cce5ff;
     }
 
-    /* Estilo para palavra encontrada */
+    .words {
+      margin-top: 1rem;
+      list-style: none;
+      padding: 0;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
     .word-item {
-        font-size: 1.5rem;
+      padding: 0.5rem;
+      color: #333;
     }
 
-    .found-word {
-        color: #4CAF50; /* verde para palavras encontradas */
+    .word-item.found {
+      text-decoration: line-through;
     }
-    </style>
+
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #9a5695;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    
+
+    button:hover {
+      background-color: #c8a2f7;
+    }
+
+    .words{
+      gap: 3vh;
+      display: flex; /* Para centralizar as palavras */
+      justify-content: center; /* Centraliza horizontalmente */
+      margin-top: 1rem;
+      list-style: none;
+      padding: 0;
+      font-size: 1.2rem; /* Tamanho da fonte */
+    }
+  </style>
 </head>
 <body>
-  <h1>Caça-Palavras</h1>
-  <div class="board" id="board"></div>
+  <h1>CAÇA-PALAVRAS</h1>
   <ul class="words" id="words"></ul>
+  <div class="board" id="board"></div>
+ 
   <button onclick="nextRound()">Próxima Rodada</button>
 
   <script>
     const rounds = [
       ["PALAVRA", "JOGO", "CODIGO", "EXEMPLO", "RODADA", "DESAFIO", "LETRA", "TEXTO"],
       ["OUTRA", "FUNCAO", "SCRIPT", "PROGRAMAR", "EVENTO", "DESENVOLVE", "CONSOLE", "LAYOUT"],
-      // Adicione mais rodadas até completar as 10
+      ["HTML", "CSS", "JAVASCRIPT", "PYTHON", "API", "REACT", "NODE", "VUEJS"],
+      ["BANANA", "MAÇÃ", "LARANJA", "UVA", "MORANGO", "ABACAXI", "PERA", "MANGA"],
+      ["ESTUDO", "ESCOLA", "ALUNO", "PROFESSOR", "MATÉRIA", "LIVRO", "AULA", "LIVRO"],
     ];
+    const colors = ["#ff99cc", "#cc99ff", "#99ccff", "#ffcc99", "#66cc66"];
     let currentRound = 0;
     const gridSize = 10;
     let letters = [];
@@ -218,7 +232,11 @@
       isSelecting = false;
       const selectedWord = selectedCells.map(cell => cell.textContent).join('');
       if (rounds[currentRound].includes(selectedWord)) {
-        selectedCells.forEach(cell => cell.classList.add('found'));
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        selectedCells.forEach(cell => {
+          cell.classList.add('found');
+          cell.style.backgroundColor = color;
+        });
         foundWords.push(selectedWord);
         updateWordList(selectedWord);
       }
@@ -229,11 +247,11 @@
     function updateWordList(word) {
       const wordItem = Array.from(document.querySelectorAll('.word-item')).find(item => item.textContent === word);
       if (wordItem) {
-        wordItem.classList.add('found-word');
+        wordItem.classList.add('found');
       }
     }
 
     setupBoard();
   </script>
 </body>
-</html> 
+</html>
