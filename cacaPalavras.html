@@ -179,150 +179,338 @@
   }
 }
 
-  </style>
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  position: relative;
+  width: 90%;
+  max-width: 400px;
+}
+
+.modal-content h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.modal-content p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.modal-content button {
+  padding: 0.5rem 1rem;
+  background-color: #66cc66;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.modal-content button:hover {
+  background-color: #4caf50;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: #333;
+}
+
+
+</style>
+
+
 </head>
 <body>
   <h1>CAÇA-PALAVRAS</h1>
   <ul class="words" id="words"></ul>
   <div class="board" id="board"></div>
  
-  <button onclick="nextRound()">Próxima Rodada</button>
+  <button onclick="nextRound()">Pular</button>
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <button id="modal-close" class="close-button" onclick="closeModal()">X</button>
+      <h2>Rodada Finalizada!</h2>
+      <p id="modal-message"></p>
+      <button id="modal-next" onclick="nextRound()">Próxima Rodada</button>
+    </div>
+  </div>
+  
+  
 
   <script>
-    const rounds = [
-      ["ESTUDAR", "JOGO", "LIVRO", "ESCOLA", "LAPIS", "TESOURA", "REGUA", "CANETA"],
-      ["BIBLIOTECA", "SALA", "CADERNO", "BORRACHA", "FLOR", "GIRASSOL", "OCULOS", "VESTIDO"],
-      ["LIXO", "SACOLA", "FRUTA", "MASCARA", "PANO", "PIANO", "CILIOS", "CHUVA"],
-      ["TROVAO", "RAIO", "LARANJA", "UVA", "MORANGO", "ABACAXI", "PERA", "MANGA"],
-      ["CABELO", "UNHA", "ALUNO", "PROFESSOR", "MATÉRIA", "LIVRO", "AULA", "SORRISO"],
-    ];
-    const colors = ["#ff99cc", "#cc99ff", "#99ccff", "#ffcc99", "#66cc66"];
-    let currentRound = 0;
-    const gridSize = 10;
-    let letters = [];
-    let foundWords = [];
-    let isSelecting = false;
-    let selectedCells = [];
+  let isSelecting = false;
+let selectedCells = [];
+let foundWords = [];
+let currentRound = 0;
 
-    function setupBoard() {
-      const board = document.getElementById('board');
-      board.innerHTML = '';
-      foundWords = [];
-      letters = Array(gridSize * gridSize).fill('');
+const rounds = [
+  ["ESTUDAR", "JOGO", "LIVRO", "ESCOLA", "LAPIS", "TESOURA", "REGUA", "CANETA"],
+  ["BIBLIOTECA", "SALA", "CADERNO", "BORRACHA", "FLOR", "GIRASSOL", "OCULOS", "VESTIDO"],
+  ["LIXO", "SACOLA", "FRUTA", "MASCARA", "PANO", "PIANO", "CILIOS", "CHUVA"],
+];
+const colors = ["#ff99cc", "#cc99ff", "#99ccff", "#ffcc99", "#66cc66"];
+const gridSize = 10;
+let letters = [];
 
-      placeWords(rounds[currentRound]);
+// Função para configurar o tabuleiro
+function setupBoard() {
+  const board = document.getElementById('board');
+  board.innerHTML = '';
+  foundWords = [];
+  letters = Array(gridSize * gridSize).fill('');
 
-      letters.forEach((letter, index) => {
-        const cell = document.createElement('div');
-        cell.textContent = letter || String.fromCharCode(65 + Math.floor(Math.random() * 26));
-        cell.dataset.index = index;
-        cell.onmousedown = startSelection;
-        cell.onmouseenter = continueSelection;
-        cell.onmouseup = endSelection;
-        board.appendChild(cell);
-      });
+  placeWords(rounds[currentRound]);
 
-      displayWords();
-    }
+  letters.forEach((letter, index) => {
+    const cell = document.createElement('div');
+    cell.textContent = letter || String.fromCharCode(65 + Math.floor(Math.random() * 26));
+    cell.dataset.index = index;
+    cell.onmousedown = startSelection;
+    cell.onmouseenter = continueSelection;
+    cell.onmouseup = endSelection;
+    board.appendChild(cell);
+  });
 
-    function placeWords(words) {
-      words.forEach(word => {
-        let placed = false;
-        while (!placed) {
-          const direction = Math.floor(Math.random() * 3);
-          const row = Math.floor(Math.random() * gridSize);
-          const col = Math.floor(Math.random() * gridSize);
+  displayWords();
+}
 
-          if (canPlaceWord(row, col, direction, word)) {
-            for (let i = 0; i < word.length; i++) {
-              const index = getIndex(row, col, direction, i);
-              letters[index] = word[i];
-            }
-            placed = true;
-          }
+// Função para posicionar palavras
+function placeWords(words) {
+  words.forEach(word => {
+    let placed = false;
+    while (!placed) {
+      const direction = Math.floor(Math.random() * 3); // 0 = vertical, 1 = horizontal, 2 = diagonal
+      const row = Math.floor(Math.random() * gridSize);
+      const col = Math.floor(Math.random() * gridSize);
+
+      if (canPlaceWord(row, col, direction, word)) {
+        for (let i = 0; i < word.length; i++) {
+          const index = getIndex(row, col, direction, i);
+          letters[index] = word[i];
         }
-      });
-    }
-
-    function canPlaceWord(row, col, direction, word) {
-      for (let i = 0; i < word.length; i++) {
-        const newRow = row + (direction === 0 ? i : direction === 2 ? i : 0);
-        const newCol = col + (direction === 1 ? i : direction === 2 ? i : 0);
-        if (newRow >= gridSize || newCol >= gridSize || letters[newRow * gridSize + newCol]) {
-          return false;
-        }
-      }
-      return true;
-    }
-
-    function getIndex(row, col, direction, i) {
-      switch (direction) {
-        case 0: return (row + i) * gridSize + col;           // vertical
-        case 1: return row * gridSize + (col + i);           // horizontal
-        case 2: return (row + i) * gridSize + (col + i);     // diagonal
+        placed = true;
       }
     }
+  });
+}
 
-    function displayWords() {
-      const wordList = document.getElementById('words');
-      wordList.innerHTML = '';
-      rounds[currentRound].forEach(word => {
-        const wordItem = document.createElement('li');
-        wordItem.textContent = word;
-        wordItem.classList.add('word-item');
-        wordList.appendChild(wordItem);
-      });
+// Função para verificar se a palavra pode ser posicionada
+function canPlaceWord(row, col, direction, word) {
+  for (let i = 0; i < word.length; i++) {
+    const newRow = row + (direction === 0 ? i : direction === 2 ? i : 0);
+    const newCol = col + (direction === 1 ? i : direction === 2 ? i : 0);
+    if (newRow >= gridSize || newCol >= gridSize || letters[newRow * gridSize + newCol]) {
+      return false;
     }
+  }
+  return true;
+}
 
-    function nextRound() {
-      if (currentRound < rounds.length - 1) {
-        currentRound++;
-        setupBoard();
-      } else {
-        alert("Jogo Concluído!");
-      }
+// Função para obter índice da célula
+function getIndex(row, col, direction, i) {
+  switch (direction) {
+    case 0: return (row + i) * gridSize + col; // Vertical
+    case 1: return row * gridSize + (col + i); // Horizontal
+    case 2: return (row + i) * gridSize + (col + i); // Diagonal
+  }
+}
+
+// Função para exibir palavras
+function displayWords() {
+  const wordList = document.getElementById('words');
+  wordList.innerHTML = '';
+  rounds[currentRound].forEach(word => {
+    const wordItem = document.createElement('li');
+    wordItem.textContent = word;
+    wordItem.classList.add('word-item');
+    wordList.appendChild(wordItem);
+  });
+}
+
+// Lógica de seleção
+function startSelection(event) {
+  isSelecting = true;
+  selectedCells = [event.target];
+  event.target.classList.add('selected');
+}
+
+function continueSelection(event) {
+  if (isSelecting) {
+    const currentCell = event.target;
+    if (!selectedCells.includes(currentCell)) {
+      selectedCells.push(currentCell);
+      currentCell.classList.add('selected');
     }
+  }
+}
 
-    function startSelection(event) {
-      isSelecting = true;
-      selectedCells = [event.target];
-      event.target.classList.add('selected');
+function endSelection() {
+  isSelecting = false;
+
+  const selectedWord = selectedCells.map(cell => cell.textContent).join('');
+  if (rounds[currentRound].includes(selectedWord) && !foundWords.includes(selectedWord)) {
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    selectedCells.forEach(cell => {
+      cell.classList.add('found');
+      cell.style.backgroundColor = color;
+    });
+    foundWords.push(selectedWord);
+    updateWordList(selectedWord);
+  }
+
+  selectedCells.forEach(cell => cell.classList.remove('selected'));
+  selectedCells = [];
+
+  checkAllWordsFound();
+}
+
+function updateWordList(word) {
+  const wordItems = document.querySelectorAll('.word-item');
+  wordItems.forEach(item => {
+    if (item.textContent === word) {
+      item.classList.add('found');
     }
+  });
+}
 
-    function continueSelection(event) {
-      if (isSelecting && !selectedCells.includes(event.target)) {
-        selectedCells.push(event.target);
-        event.target.classList.add('selected');
-      }
-    }
+function checkAllWordsFound() {
+  if (foundWords.length === rounds[currentRound].length) {
+    showModal("Parabéns! Você encontrou todas as palavras desta rodada!");
+  }
+}
 
-    function endSelection() {
-      isSelecting = false;
-      const selectedWord = selectedCells.map(cell => cell.textContent).join('');
-      if (rounds[currentRound].includes(selectedWord)) {
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        selectedCells.forEach(cell => {
-          cell.classList.add('found');
-          cell.style.backgroundColor = color;
-        });
-        foundWords.push(selectedWord);
-        updateWordList(selectedWord);
-      }
-      selectedCells.forEach(cell => cell.classList.remove('selected'));
-      selectedCells = [];
-    }
+function showModal(message) {
+  const modal = document.getElementById('modal');
+  const modalMessage = document.getElementById('modal-message');
+  
+  modalMessage.textContent = message;
+  modal.classList.remove('hidden');
+}
 
-    function updateWordList(word) {
-      const wordItem = Array.from(document.querySelectorAll('.word-item')).find(item => item.textContent === word);
-      if (wordItem) {
-        wordItem.classList.add('found');
-      }
-    }
+function closeModal() {
+  const modal = document.getElementById('modal');
+  modal.classList.add('hidden');
+}
 
+function nextRound() {
+  closeModal();
+  if (currentRound < rounds.length - 1) {
+    currentRound++;
     setupBoard();
+  } else {
+    showModal("Jogo Concluído! Obrigado por jogar!");
+    document.getElementById('modal-next').style.display = "none";
+  }
+}
+
+// Event Listeners para o Modal
+document.getElementById('modal-close').onclick = closeModal;
+document.getElementById('modal-next').onclick = nextRound;
 
 
-    
+
+
+
+// deixa touch 
+function startSelection(event) {
+  if (event.type === "mousedown" || event.type === "touchstart") {
+    isSelecting = true;
+    selectedCells = [event.target];
+    selectionStartIndex = parseInt(event.target.dataset.index);
+    selectionDirection = null;
+    event.target.classList.add('selected');
+  }
+}
+
+function continueSelection(event) {
+  if (isSelecting) {
+    const currentCell = event.target;
+    const currentIndex = parseInt(currentCell.dataset.index);
+
+    if (!selectionDirection && selectedCells.length === 1) {
+      const firstIndex = parseInt(selectedCells[0].dataset.index);
+      const diff = currentIndex - firstIndex;
+
+      if (diff === 1) selectionDirection = "horizontal";
+      else if (diff === gridSize) selectionDirection = "vertical";
+      else if (diff === gridSize + 1) selectionDirection = "diagonal";
+      else return;
+    }
+
+    if (isValidSelection(currentIndex)) {
+      selectedCells.push(currentCell);
+      currentCell.classList.add('selected');
+    }
+  }
+}
+
+function endSelection(event) {
+  if (event.type === "mouseup" || event.type === "touchend") {
+    isSelecting = false;
+
+    const selectedWord = selectedCells.map(cell => cell.textContent).join('');
+    if (rounds[currentRound].includes(selectedWord) && !foundWords.includes(selectedWord)) {
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      selectedCells.forEach(cell => {
+        cell.classList.add('found');
+        cell.style.backgroundColor = color;
+      });
+      foundWords.push(selectedWord);
+      updateWordList(selectedWord);
+    }
+
+    selectedCells.forEach(cell => cell.classList.remove('selected'));
+    selectedCells = [];
+
+    checkAllWordsFound();
+  }
+}
+
+// Adicionar eventos de toque
+board.addEventListener("touchstart", startSelection, false);
+board.addEventListener("touchmove", continueSelection, false);
+board.addEventListener("touchend", endSelection, false);
+
+// Adicionar eventos de mouse (para desktops)
+board.addEventListener("mousedown", startSelection, false);
+board.addEventListener("mousemove", continueSelection, false);
+board.addEventListener("mouseup", endSelection, false);
+
+// Inicializar o jogo
+setupBoard();
+
   </script>
 </body>
 </html>

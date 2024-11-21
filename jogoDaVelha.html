@@ -13,9 +13,10 @@
 <body>
 
     <header>
-        <div class="voltar"id="voltarParaInicio">
-            <span class="material-icons" id="voltar">arrow_back</span>
+        <div class="voltar"id="voltarParaInicio" onclick="window.location.href='quiz.html?'">
+            <span class="material-icons" >arrow_back</span>
         </div>
+
         <div class="onda-container">
             <svg viewBox="0 0 1440 250">
                 <path fill="#C2D898" fill-opacity="1"
@@ -220,10 +221,10 @@
         sairModalBtn.addEventListener("click", () => {
             window.location.reload(); // Reinicia a página
         });
-
-        voltarParaInicioBtn.addEventListener("click", () => {
-            window.location.reload(); // Reinicia a página
-        });
+        document.getElementById("voltarParaInicio").onclick = function() {
+            // Redirecionar para a página inicial (altere o nome para a página desejada)
+            window.location.replace("inicioJogo.html"); // Certifique-se de que "inicio.html" seja o nome correto
+        };
     </script>
 </body>
 
