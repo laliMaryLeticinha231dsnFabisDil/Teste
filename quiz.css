@@ -221,3 +221,18 @@ main  {
         width: 100%; /* Ajuste de largura para a imagem */
     }
 }
+
+@media screen and (max-width: 768px) {
+    .fundo-branco-quiz{
+        width:60vh;
+        padding: 10px;
+        height: 105vh; /* Permite que a altura se ajuste ao conteúdo */
+    }
+    .alternativa {
+        width: 50vh;
+          font-size: 2.2vh; /* Ajuste no tamanho da fonte */
+          height: 7vh; /* Deixa a altura flexível conforme o conteúdo */
+          padding: 8px;
+          font-size: 1.8vh;
+      }
+}
