@@ -154,10 +154,11 @@ main  {
     cursor: pointer; /* Cursor como ponteiro */
 }
 
-.imagem-pequena {
+.continente {
     width: 50%; /* Ajuste a largura conforme necessário */
     height: auto; /* Mantém a proporção da imagem */
 }
+
 
 
 @media screen and (max-width: 365px) {
@@ -224,7 +225,7 @@ main  {
 
 @media screen and (max-width: 768px) {
     .fundo-branco-quiz{
-        width:45vh;
+        width:52vh;
         padding: 10px;
         height: 150vh; /* Permite que a altura se ajuste ao conteúdo */
     }
