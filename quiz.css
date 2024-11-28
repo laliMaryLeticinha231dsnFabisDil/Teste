@@ -234,9 +234,9 @@ main  {
         overflow-y: auto; /* Permite rolagem vertical para conteúdo longo */
     }
     .fundo-branco-quiz{
-        width:50vh;
+        width:40vh;
         padding: 20px;
-        height: 120vh; /* Permite que a altura se ajuste ao conteúdo */
+        height: 110vh; /* Permite que a altura se ajuste ao conteúdo */
     }
     .alternativa {
         width: 40vh;
