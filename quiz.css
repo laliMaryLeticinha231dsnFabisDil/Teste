@@ -234,9 +234,9 @@ main  {
         overflow-y: auto; /* Permite rolagem vertical para conteúdo longo */
     }
     .fundo-branco-quiz{
-        width:40vh;
+        width:50vh;
         padding: 20px;
-        height: 110vh; /* Permite que a altura se ajuste ao conteúdo */
+        height: 105vh; /* Permite que a altura se ajuste ao conteúdo */
     }
     .alternativa {
         width: 40vh;
@@ -245,4 +245,19 @@ main  {
           padding: 8px;
           font-size: 1.8vh;
       }
+   
+    
+      .modal-conteudo {
+        width: 80%; /* Modal ocupa menos espaço horizontal */
+        height: auto; /* Altura ajustável ao conteúdo */
+    }
+
+    #reiniciar, #paginaInicialJogos {
+        width: 100%; /* Botões ocupam toda a largura do modal */
+        font-size: 2.3vh; /* Fonte dos botões no modal */
+    }
+
+    .fechar {
+        font-size: 24px;
+    }
 }
