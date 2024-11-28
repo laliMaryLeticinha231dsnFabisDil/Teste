@@ -234,14 +234,14 @@ main  {
         overflow-y: auto; /* Permite rolagem vertical para conteúdo longo */
     }
     .fundo-branco-quiz{
-        width:60vh;
+        width:50vh;
         padding: 20px;
-        height: 90vh; /* Permite que a altura se ajuste ao conteúdo */
+        height: 120vh; /* Permite que a altura se ajuste ao conteúdo */
     }
     .alternativa {
-        width: 50vh;
+        width: 40vh;
           font-size: 2.2vh; /* Ajuste no tamanho da fonte */
-          height: 7vh; /* Deixa a altura flexível conforme o conteúdo */
+          height: 5vh; /* Deixa a altura flexível conforme o conteúdo */
           padding: 8px;
           font-size: 1.8vh;
       }
