@@ -236,7 +236,7 @@ main  {
     .fundo-branco-quiz{
         width:50vh;
         padding: 20px;
-        height: 96vh; /* Permite que a altura se ajuste ao conteúdo */
+        height: 92vh; /* Permite que a altura se ajuste ao conteúdo */
     }
     .alternativa {
         width: 40vh;
