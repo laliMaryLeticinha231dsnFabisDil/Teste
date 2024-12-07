@@ -276,7 +276,24 @@ font-family: 'Nunito';
   }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 768px) {
+  .board-container button {
+    position: absolute;
+    margin-top: 84vh;
+    height: 5vh;
+    width: 20vh;
+    left: 8%;
+    
+  }
+
+
+}
+
+
+@media screen and (max-width: 720px) {
+  .titulo-caca-palavra{
+    display: none;
+  }
   .game-container {
     gap: 1rem;
     padding: 1rem;
@@ -293,7 +310,7 @@ font-family: 'Nunito';
   }
 
   .board {
-    grid-template-columns: repeat(8, 2rem);
+    grid-template-columns: repeat(9, 2rem);
     grid-gap: 0.15rem;
   }
 
