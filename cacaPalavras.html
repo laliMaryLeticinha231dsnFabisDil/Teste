@@ -232,30 +232,80 @@ font-family: 'Nunito';
   }
 }
 
-@media screen and (max-width: 720px) {
-  .board {
-    grid-template-columns: repeat(9, 2rem);
-    grid-gap: 0.2rem;
-    margin-top: 10vh;
+@media screen and (max-width: 768px) {
+  .game-container {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem;
+    align-items: center;
   }
 
-  .titulo-caca-palavra{
-    display: none;
+  .words-container h2, 
+  .board-container h2 {
+    font-size: 1.6rem;
+    text-align: center;
   }
-  .board div {
-    width: 2rem;
-    height: 2rem;
-    font-size: 0.8rem;
+
+  .words {
+    text-align: center;
   }
 
   .words li {
+    font-size: 1.1rem;
+  }
+
+  .board {
+    grid-template-columns: repeat(9, 2.2rem);
+    grid-gap: 0.2rem;
+  }
+
+  .board div {
+    width: 2.2rem;
+    height: 2.2rem;
     font-size: 1rem;
   }
 
   button {
+    padding: 0.6rem 1.2rem;
+    font-size: 1.1rem;
+  }
+
+  .modal-content {
+    width: 90%;
+    padding: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .game-container {
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .words-container h2,
+  .board-container h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .words {
+    font-size: 1rem;
+  }
+
+  .board {
+    grid-template-columns: repeat(8, 2rem);
+    grid-gap: 0.15rem;
+  }
+
+  .board div {
+    width: 2rem;
+    height: 2rem;
     font-size: 0.9rem;
-    padding: 0.2rem 0.4rem;
-margin-top: -1vh;
+  }
+
+  button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
   }
 
   .modal-content {
@@ -263,6 +313,7 @@ margin-top: -1vh;
     padding: 1rem;
   }
 }
+
   </style>
 </head>
 
