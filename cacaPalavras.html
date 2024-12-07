@@ -1,36 +1,52 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Caça-Palavras</title>
+  <link rel="icon" href="img/logo.png">
+  <title>Caça-Palavras - Sunflower</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
-      background-color: #f1f1f1;
+      background-color: #f9f9f9;
       color: #333;
-      text-align: center;
-      padding: 2rem;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
+      flex-direction: column;
       min-height: 100vh;
       margin: 0;
     }
 
     .game-container {
       display: flex;
-      align-items: flex-start;
       justify-content: center;
-      gap: 3rem;
+      gap: 2rem;
+      
+      height: 90vh;
       flex-wrap: wrap;
-      max-width: 1200px;
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      border-radius: 10px;
+    }
+    @font-face {
+        font-family: Nunito;
+        src: url(font/Nunito-VariableFont_wght.ttf);
+    }
+    .words-container {
+      flex-grow: 1;
+font-family: 'Nunito';
+     margin-top: 4vh;
+      text-align: left;
     }
 
-    .words-container {
-      max-width: 300px;
-      flex-grow: 0;
-      text-align: left;
+    .words-container h2 {
+      color: #4caf50;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
     }
 
     .words {
@@ -40,68 +56,86 @@
       margin: 0;
     }
 
+    .words li {
+      padding: 0.3rem 0;
+      transition: color 0.3s ease, text-decoration 0.3s ease;
+    }
+
     .words .found {
       text-decoration: line-through;
-      color: #66cc66;
+      color: #4caf50;
     }
 
     .board-container {
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: 1rem;
+      margin-top: -5vh;
+    }
+
+    .board-container h2 {
+      color: #99ccff;
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
     }
 
     .board {
       display: grid;
-      grid-template-columns: repeat(12, 2rem); 
-      grid-gap: 0.2rem;
-      margin-bottom: 2rem;
-      background-color: #fff;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-      border-radius: 10px;
+      grid-template-columns: repeat(12, 2.5rem);
+      grid-gap: 0.1rem;
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+      padding: 0.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
     .board div {
-      width: 2rem;
-      height: 2rem;
+      width: 2.5rem;
+      height: 2.5rem;
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: #e0e0e0;
-      cursor: pointer;
-      font-size: 1rem;
+      background-color: #f1f1f1;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #333;
       border-radius: 5px;
+      cursor: pointer;
       transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     .board div:hover {
-      background-color: #ffcc00;
+      background-color: #99ccff;
+      color: #ffffff;
       transform: scale(1.1);
     }
 
     .board .selected {
-      background-color: #ffcc00;
+      background-color: #FFCC00;
+      color: white;
     }
 
     .board .found {
-      background-color: #66cc66;
+      background-color: #4caf50;
       color: white;
     }
 
     button {
       padding: 0.7rem 1.5rem;
-      margin: 1rem;
-      background-color: #66cc66;
+      background-color: #99ccff;
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
       font-size: 1.2rem;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     button:hover {
-      background-color: #4caf50;
+      background-color: #7ebbf8;
+      transform: scale(1.05);
     }
 
     .modal {
@@ -110,7 +144,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.5);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -132,12 +166,13 @@
       text-align: center;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
       width: 90%;
-      max-width: 500px;
+      max-width: 400px;
     }
 
     .modal-content h2 {
       font-size: 2rem;
       margin-bottom: 1rem;
+      color: #007BFF;
     }
 
     .modal-content p {
@@ -146,207 +181,262 @@
     }
 
     .modal-content button {
+      background-color: #007BFF;
+      color: white;
       padding: 0.7rem 1.5rem;
-      background-color: #66cc66;
-      color: #ffffff;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      font-size: 1.2rem;
+      font-size: 1rem;
     }
 
     .modal-content button:hover {
-      background-color: #4caf50;
+      background-color: #0056b3;
     }
 
-    .close-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      color: #aaa;
-      cursor: pointer;
-    }
 
-    .close-button:hover {
-      color: #333;
-    }
+
+
+
+    @media screen and (max-width: 768px) {
+  .game-container {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .words-container h2, 
+  .board-container h2 {
+    font-size: 1.4rem;
+  }
+
+  .board {
+    grid-template-columns: repeat(8, 2.2rem);
+    grid-gap: 0.2rem;
+  }
+
+  .board div {
+    width: 2.2rem;
+    height: 2.2rem;
+    font-size: 0.9rem;
+  }
+
+  button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+
+  .modal-content {
+    width: 90%;
+    padding: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .board {
+    grid-template-columns: repeat(9, 2rem);
+    grid-gap: 0.2rem;
+    margin-top: 10vh;
+  }
+
+  .titulo-caca-palavra{
+    display: none;
+  }
+  .board div {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.8rem;
+  }
+
+  .words li {
+    font-size: 1rem;
+  }
+
+  button {
+    font-size: 0.9rem;
+    padding: 0.2rem 0.4rem;
+margin-top: -1vh;
+  }
+
+  .modal-content {
+    width: 80%;
+    padding: 1rem;
+  }
+}
   </style>
 </head>
+
 <body>
   <div class="game-container">
-    <!-- Lista de palavras -->
     <div class="words-container">
       <h2>Palavras</h2>
       <ul class="words" id="words"></ul>
     </div>
 
-    <!-- Tabuleiro de caça-palavras -->
     <div class="board-container">
-      <h2>Caça-Palavras</h2>
+      <h2 class="titulo-caca-palavra">Caça-Palavras</h2>
       <div class="board" id="board"></div>
-      <button onclick="nextRound()">Próxima Rodada</button>
-      <button onclick="skipRound()">Pular</button>
+      <button onclick="nextRound()">próxima rodada</button>
+    
     </div>
   </div>
 
   <div id="modal" class="modal">
     <div class="modal-content">
-      <button id="modal-close" class="close-button" onclick="closeModal()">X</button>
       <h2>Rodada Finalizada!</h2>
       <p id="modal-message"></p>
-      <button id="modal-next" onclick="nextRound()">Próxima Rodada</button>
+      <button  onclick="window.location.href='index.html';">voltar ao início</button>
     </div>
   </div>
 
   <script>
-    const rounds = [
-      ["ESTUDAR", "JOGO", "LIVRO", "ESCOLA", "LAPIS", "TESOURA", "REGUA", "CANETA"],
-      ["BIBLIOTECA", "SALA", "CADERNO", "BORRACHA", "FLOR", "GIRASSOL", "OCULOS", "VESTIDO"],
-      ["LIXO", "SACOLA", "FRUTA", "MASCARA", "PIANO", "CILIOS", "CHUVA"],
-      ["TROVAO", "RAIO", "LARANJA", "UVA", "MORANGO", "ABACAXI", "PERA", "MANGA"],
-      ["CABELO", "UNHA", "ALUNO", "PROFESSOR", "MATERIA", "LIVRO", "AULA", "SORRISO"]
-    ];
-
-    const gridSize = 12;
-    let currentRound = 0;
-    let letters = [];
-    let foundWords = [];
-    let selectedCells = [];
-
-    function setupBoard() {
-      const board = document.getElementById('board');
-      board.innerHTML = '';
-      selectedCells = [];
-      letters = Array(gridSize * gridSize).fill('');
-      foundWords = [];
-      placeWords(rounds[currentRound]);
-
-      letters.forEach((letter, index) => {
-        const cell = document.createElement('div');
-        cell.textContent = letter || String.fromCharCode(65 + Math.floor(Math.random() * 26));
-        cell.dataset.index = index;
-        cell.onclick = selectCell;
-        board.appendChild(cell);
-      });
-
-      displayWords();
-    }
-
-    function placeWords(words) {
-      words.forEach(word => {
-        let placed = false;
-        while (!placed) {
-          const direction = Math.floor(Math.random() * 3);
-          const row = Math.floor(Math.random() * gridSize);
-          const col = Math.floor(Math.random() * gridSize);
-
-          if (canPlaceWord(row, col, direction, word)) {
-            for (let i = 0; i < word.length; i++) {
-              const index = getIndex(row, col, direction, i);
-              letters[index] = word[i];
-            }
-            placed = true;
-          }
-        }
-      });
-    }
-
-    function canPlaceWord(row, col, direction, word) {
-      for (let i = 0; i < word.length; i++) {
-        const newRow = row + (direction === 0 ? i : direction === 2 ? i : 0);
-        const newCol = col + (direction === 1 ? i : direction === 2 ? i : 0);
-        if (newRow < 0 || newCol < 0 || newRow >= gridSize || newCol >= gridSize || letters[getIndex(newRow, newCol)] !== '') {
-          return false;
-        }
-      }
-      return true;
-    }
-
-    function getIndex(row, col, direction, offset = 0) {
-      return (row + (direction === 0 ? offset : direction === 2 ? offset : 0)) * gridSize + (col + (direction === 1 ? offset : direction === 2 ? offset : 0));
-    }
-
-    function displayWords() {
-      const wordList = document.getElementById('words');
-      wordList.innerHTML = '';
-      rounds[currentRound].forEach(word => {
-        const li = document.createElement('li');
-        li.textContent = word;
-        wordList.appendChild(li);
-      });
-    }
-
-    function selectCell(event) {
-      const cell = event.target;
-      const index = parseInt(cell.dataset.index);
-      const word = letters[index];
-
-      if (foundWords.includes(word)) return;  // Ignorar clique em palavras já encontradas
-
-      if (selectedCells.includes(index)) {
-        cell.classList.remove('selected');
-        selectedCells = selectedCells.filter(i => i !== index);
-      } else {
-        selectedCells.push(index);
-        cell.classList.add('selected');
-      }
-
-      const selectedWord = selectedCells.map(i => letters[i]).join('');
-
-      if (rounds[currentRound].includes(selectedWord) && !foundWords.includes(selectedWord)) {
-        foundWords.push(selectedWord);
-
-        document.querySelectorAll('.words li').forEach(item => {
-          if (item.textContent === selectedWord) {
-            item.classList.add('found');
-          }
-        });
-
-        selectedCells.forEach(i => {
-          const selectedCell = document.querySelector(`[data-index='${i}']`);
-          selectedCell.classList.add('found');
-        });
-      }
-    }
-
-    function nextRound() {
-      if (foundWords.length === rounds[currentRound].length) {
-        showModal("Parabéns! Você encontrou todas as palavras desta rodada!");
-      }
-      currentRound++;
-      if (currentRound < rounds.length) {
-        setupBoard();
-      } else {
-        showModal("Jogo Concluído! Obrigado por jogar!");
-      }
-    }
-
-    function skipRound() {
-      currentRound++;
-      if (currentRound < rounds.length) {
-        setupBoard();
-      } else {
-        showModal("Jogo Concluído! Obrigado por jogar!");
-      }
-    }
-
-    function showModal(message) {
-      const modal = document.getElementById('modal');
-      const modalMessage = document.getElementById('modal-message');
-      modalMessage.textContent = message;
-      modal.classList.add('show');
-    }
-
-    function closeModal() {
-      const modal = document.getElementById('modal');
-      modal.classList.remove('show');
-    }
-
-    // Iniciar o jogo
+    // (Seu script existente permanece o mesmo)
     setupBoard();
   </script>
 </body>
+
+</html>
+
+
+<script>
+  const rounds = [
+    ["ESTUDAR", "JOGO", "LIVRO", "ESCOLA", "LAPIS", "TESOURA", "REGUA", "CANETA"],
+    ["BIBLIOTECA", "SALA", "CADERNO", "BORRACHA", "FLOR", "GIRASSOL", "OCULOS", "VESTIDO"],
+    ["LIXO", "SACOLA", "FRUTA", "MASCARA", "PIANO", "CILIOS", "CHUVA"],
+    ["TROVAO", "RAIO", "LARANJA", "UVA", "MORANGO", "ABACAXI", "PERA", "MANGA"],
+    ["CABELO", "UNHA", "ALUNO", "PROFESSOR", "MATERIA", "LIVRO", "AULA", "SORRISO"]
+  ];
+
+  const gridSize = 12;
+  let currentRound = 0;
+  let letters = [];
+  let foundWords = [];
+  let selectedCells = [];
+
+  function setupBoard() {
+    const board = document.getElementById('board');
+    board.innerHTML = '';
+    selectedCells = [];
+    letters = Array(gridSize * gridSize).fill('');
+    foundWords = [];
+    placeWords(rounds[currentRound]);
+
+    letters.forEach((letter, index) => {
+      const cell = document.createElement('div');
+      cell.textContent = letter || String.fromCharCode(65 + Math.floor(Math.random() * 26));
+      cell.dataset.index = index;
+      cell.onclick = selectCell;
+      board.appendChild(cell);
+    });
+
+    displayWords();
+  }
+
+  function placeWords(words) {
+    words.forEach(word => {
+      let placed = false;
+      while (!placed) {
+        const direction = Math.floor(Math.random() * 3);
+        const row = Math.floor(Math.random() * gridSize);
+        const col = Math.floor(Math.random() * gridSize);
+
+        if (canPlaceWord(row, col, direction, word)) {
+          for (let i = 0; i < word.length; i++) {
+            const index = getIndex(row, col, direction, i);
+            letters[index] = word[i];
+          }
+          placed = true;
+        }
+      }
+    });
+  }
+
+  function canPlaceWord(row, col, direction, word) {
+    for (let i = 0; i < word.length; i++) {
+      const newRow = row + (direction === 0 ? i : direction === 2 ? i : 0);
+      const newCol = col + (direction === 1 ? i : direction === 2 ? i : 0);
+      if (newRow < 0 || newCol < 0 || newRow >= gridSize || newCol >= gridSize || letters[getIndex(newRow, newCol)] !== '') {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function getIndex(row, col, direction, offset = 0) {
+    return (row + (direction === 0 ? offset : direction === 2 ? offset : 0)) * gridSize + (col + (direction === 1 ? offset : direction === 2 ? offset : 0));
+  }
+
+  function displayWords() {
+    const wordList = document.getElementById('words');
+    wordList.innerHTML = '';
+    rounds[currentRound].forEach(word => {
+      const li = document.createElement('li');
+      li.textContent = word;
+      wordList.appendChild(li);
+    });
+  }
+
+  function selectCell(event) {
+    const cell = event.target;
+    const index = parseInt(cell.dataset.index);
+    const letter = letters[index];
+
+    if (selectedCells.includes(index)) {
+      cell.classList.remove('selected');
+      selectedCells = selectedCells.filter(i => i !== index);
+    } else {
+      selectedCells.push(index);
+      cell.classList.add('selected');
+    }
+
+    const selectedWord = selectedCells.map(i => letters[i]).join('');
+
+    if (rounds[currentRound].includes(selectedWord) && !foundWords.includes(selectedWord)) {
+      foundWords.push(selectedWord);
+
+      document.querySelectorAll('.words li').forEach(item => {
+        if (item.textContent === selectedWord) {
+          item.classList.add('found');
+        }
+      });
+
+      selectedCells.forEach(i => {
+        const selectedCell = document.querySelector(`[data-index='${i}']`);
+        selectedCell.classList.add('found');
+      });
+
+      selectedCells = [];
+    }
+  }
+
+  function nextRound() {
+    if (foundWords.length === rounds[currentRound].length) {
+      currentRound++;
+      if (currentRound >= rounds.length) {
+        showModal("Parabéns, você concluiu todas as rodadas!");
+      } else {
+        setupBoard();
+      }
+    } else {
+      alert("Você ainda não encontrou todas as palavras!");
+    }
+  }
+
+  function showModal(message) {
+    const modal = document.getElementById('modal');
+    const modalMessage = document.getElementById('modal-message');
+    modalMessage.textContent = message;
+    modal.classList.add('show');
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('modal');
+    modal.classList.remove('show');
+  }
+
+  setupBoard();
+</script>
+
+</body>
+
 </html>
