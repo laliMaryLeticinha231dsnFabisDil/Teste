@@ -402,12 +402,18 @@
       });
 
       selectedCells.forEach(i => {
-        const selectedCell = document.querySelector(`[data-index='${i}']`);
+        const selectedCell = document.querySelector([data-index='${i}']);
         selectedCell.classList.add('found');
       });
 
       selectedCells = [];
     }
+  }
+  function showModal(message) {
+    const modal = document.getElementById('modal');
+    const modalMessage = document.getElementById('modal-message');
+    modalMessage.textContent = message;
+    modal.classList.add('show');
   }
 
   function nextRound() {
@@ -440,4 +446,4 @@
 
 </body>
 
-</html>
+</html> 
