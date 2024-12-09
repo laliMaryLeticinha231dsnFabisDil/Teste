@@ -196,101 +196,34 @@
       background-color: #0056b3;
     }
 
-    @media screen and (max-width: 320px) {
-      .titulo-caca-palavra {
-        display: none;
-      }
-
-      .game-container {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-        padding: 1rem;
-      }
-
-      .words-container {
-        text-align: center;
-      }
-
-      .words-container h2 {
-        font-size: 1.2rem;
-      }
-
-      .words {
-        font-size: 0.9rem;
-      }
-
-      .board {
-        grid-template-columns: repeat(8, 1.8rem);
-        grid-gap: 0.1rem;
-      }
-
-      .board div {
-        width: 1.8rem;
-        height: 1.8rem;
-        font-size: 0.8rem;
-      }
-
-      button {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.8rem;
-      }
-
-      .modal-content {
-        width: 95%;
-      }
-
-      .modal-content h2 {
-        font-size: 1.6rem;
-      }
-
-      .modal-content p {
-        font-size: 1rem;
-      }
-
-      .modal-content button {
-        font-size: 0.9rem;
-        padding: 0.6rem 1rem;
-      }
-    }
-
     @media screen and (max-width: 720px) {
-      .titulo-caca-palavra {
+
+      .titulo-caca-palavra,
+      .palavras {
         display: none;
       }
 
-      .game-container {
-        flex-direction: column;
-        align-items: center;
-        gap: 1.5rem;
-      }
-
-      .words-container {
-        text-align: center;
-      }
-
-      .words-container h2 {
-        font-size: 1.4rem;
-      }
-
       .words {
-        font-size: 1rem;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        display: flex;
+        font-size: 2vh;
+        gap: 1vh;
       }
-
-      .board {
-        grid-template-columns: repeat(9, 2rem);
-        grid-gap: 0.15rem;
+      .game-container{
+        margin-top: 4vh;
+        width: 53vh;
       }
-
-      .board div {
-        width: 2rem;
-        height: 2rem;
-        font-size: 0.9rem;
+      .board{
+        width: 55vh;
+        height: 80vh;
+        grid-template-columns: repeat(9, 2.6rem);
       }
-
-      button {
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
+      .board div{
+        width: 4vh;
+        height: 4vh;
+        gap: 0.15vh;
+        font-size: 2vh;
       }
     }
   </style>
@@ -299,7 +232,7 @@
 <body>
   <div class="game-container">
     <div class="words-container">
-      <h2>Palavras</h2>
+      <h2 class="palavras">Palavras</h2>
       <ul class="words" id="words"></ul>
     </div>
 
