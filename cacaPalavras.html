@@ -197,73 +197,88 @@
     }
 
     @media screen and (max-width: 720px) {
-  .titulo-caca-palavra,
-  .palavras {
-    display: none; /* Esconde elementos grandes */
-  }
 
-  .words-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 2vh;
-    padding: 0 5vw; /* Espaçamento nas laterais */
-  }
+      .titulo-caca-palavra,
+      .palavras {
+        display: none;
+        /* Esconde elementos grandes */
+      }
 
-  .words {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem; /* Espaço entre palavras */
-    font-size: 1.6vh; /* Texto menor para telas pequenas */
-    justify-content: center;
-  }
+      .words-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 2vh;
+        padding: 0 5vw;
+        /* Espaçamento nas laterais */
+      }
 
-  .game-container {
-    flex-direction: column;
-    width: 80%; /* Ocupa a largura total */
-    height: auto;
-    padding: 1rem;
-    box-shadow: none; /* Remove sombras em telas pequenas */
-  }
+      .words {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        /* Espaço entre palavras */
+        font-size: 1.6vh;
+        /* Texto menor para telas pequenas */
+        justify-content: center;
+      }
 
-  .board-container {
-    width: 100%; /* Ocupa todo o espaço horizontal */
-    max-width: 110vh; /* Evita ultrapassar os limites */
-  }
+      .game-container {
+        flex-direction: column;
+        width: 80%;
+        /* Ocupa a largura total */
+        height: auto;
+        padding: 1rem;
+        box-shadow: none;
+        /* Remove sombras em telas pequenas */
+      }
 
-  .board {
-    grid-template-columns: repeat(9, 2fr); /* 9 colunas para facilitar leitura */
-    gap: 0.3rem; /* Maior espaço entre as células */
-    width: 100%;
-    max-width: 85vw; /* Limita o tamanho */
-  }
+      .board-container {
+        width: 100%;
+        /* Ocupa todo o espaço horizontal */
+        max-width: 110vh;
+        /* Evita ultrapassar os limites */
+      }
 
-  .board div {
-    width: 3.5vh; /* Células menores */
-    height: 3.5vh;
-    font-size: 1.5vh;
-    border-radius: 4px;
-  }
+      .board {
+        grid-template-columns: repeat(12, 1.85rem);
+        /* 9 colunas para facilitar leitura */
+        gap: 0.3rem;
+        /* Maior espaço entre as células */
+        width: 100%;
+        max-width: 85vw;
+        /* Limita o tamanho */
+      }
 
-  .board div:hover {
-    transform: scale(1.05); /* Zoom leve */
-    background-color: #d1e7ff;
-  }
+      .board div {
+        width: 3.5vh;
+        /* Células menores */
+        height: 3.5vh;
+        font-size: 1.5vh;
+        border-radius: 4px;
+      }
 
-  button {
-    width: 80%; /* Botão adaptado para telas pequenas */
-    padding: 0.6rem;
-    font-size: 1rem;
-    margin-top: 1rem;
-    border-radius: 5px;
-  }
+      .board div:hover {
+        transform: scale(1.05);
+        /* Zoom leve */
+        background-color: #d1e7ff;
+      }
 
-  .modal-content {
-    width: 90%; /* Modal mais compacto */
-    font-size: 0.9rem;
-  }
-}
+      button {
+        width: 80%;
+        /* Botão adaptado para telas pequenas */
+        padding: 0.6rem;
+        font-size: 1rem;
+        margin-top: 1rem;
+        border-radius: 5px;
+      }
 
+      .modal-content {
+        width: 90%;
+        /* Modal mais compacto */
+        font-size: 0.9rem;
+      }
+    }
   </style>
 </head>
 
@@ -438,22 +453,22 @@
 
 
   function canPlaceWord(row, col, direction, word) {
-  for (let i = 0; i < word.length; i++) {
-    const newRow = row + (direction === 0 ? i : direction === 2 ? i : 0);
-    const newCol = col + (direction === 1 ? i : direction === 2 ? i : 0);
+    for (let i = 0; i < word.length; i++) {
+      const newRow = row + (direction === 0 ? i : direction === 2 ? i : 0);
+      const newCol = col + (direction === 1 ? i : direction === 2 ? i : 0);
 
-    // Verifica se a palavra ultrapassa os limites do grid
-    if (
-      newRow < 0 || newCol < 0 || // Fora do grid
-      newRow >= gridSize || newCol >= gridSize || // Ultrapassa o grid
-      (direction === 1 && col + word.length > gridSize) || // Ultrapassa a borda direita (horizontal)
-      letters[getIndex(newRow, newCol)] !== '' // Sobreposição de letras
-    ) {
-      return false;
+      // Verifica se a palavra ultrapassa os limites do grid
+      if (
+        newRow < 0 || newCol < 0 || // Fora do grid
+        newRow >= gridSize || newCol >= gridSize || // Ultrapassa o grid
+        (direction === 1 && col + word.length > gridSize) || // Ultrapassa a borda direita (horizontal)
+        letters[getIndex(newRow, newCol)] !== '' // Sobreposição de letras
+      ) {
+        return false;
+      }
     }
+    return true;
   }
-  return true;
-}
 
   setupBoard();
 </script>
