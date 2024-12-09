@@ -241,9 +241,9 @@
       }
 
       .board {
-        grid-template-columns: repeat(12, 6fr);
+        grid-template-columns: repeat(12, 2fr);
         /* 9 colunas para facilitar leitura */
-        gap: 0.3rem;
+        gap: 0.2rem;
         /* Maior espaço entre as células */
         width: 100%;
         max-width: 85vw;
@@ -251,15 +251,15 @@
       }
 
       .board div {
-        width: 3.5vh;
+        width: 2.5vh;
         /* Células menores */
-        height: 3.5vh;
-        font-size: 1.5vh;
+        height: 2.5vh;
+        font-size: 1vh;
         border-radius: 4px;
       }
 
       .board div:hover {
-        transform: scale(1.05);
+        transform: scale(1);
         /* Zoom leve */
         background-color: #d1e7ff;
       }
