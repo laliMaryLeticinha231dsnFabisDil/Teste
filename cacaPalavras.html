@@ -409,6 +409,12 @@
       selectedCells = [];
     }
   }
+  function showModal(message) {
+    const modal = document.getElementById('modal');
+    const modalMessage = document.getElementById('modal-message');
+    modalMessage.textContent = message;
+    modal.classList.add('show');
+  }
 
   function nextRound() {
     if (foundWords.length === rounds[currentRound].length) {
