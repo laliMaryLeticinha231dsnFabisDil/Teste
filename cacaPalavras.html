@@ -232,7 +232,7 @@
   }
 
   .board {
-    grid-template-columns: repeat(8, 1fr); /* 9 colunas para facilitar leitura */
+    grid-template-columns: repeat(9, 2fr); /* 9 colunas para facilitar leitura */
     gap: 0.3rem; /* Maior espaço entre as células */
     width: 100%;
     max-width: 85vw; /* Limita o tamanho */
@@ -409,12 +409,6 @@
       selectedCells = [];
     }
   }
-  function showModal(message) {
-    const modal = document.getElementById('modal');
-    const modalMessage = document.getElementById('modal-message');
-    modalMessage.textContent = message;
-    modal.classList.add('show');
-  }
 
   function nextRound() {
     if (foundWords.length === rounds[currentRound].length) {
@@ -440,99 +434,6 @@
     const modal = document.getElementById('modal');
     modal.classList.remove('show');
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  function selectCell(event) {
-  const cell = event.target;
-  const index = parseInt(cell.dataset.index);
-
-  // Adiciona ou remove a célula selecionada
-  if (selectedCells.includes(index)) {
-    cell.classList.remove('selected');
-    selectedCells = selectedCells.filter(i => i !== index);
-  } else {
-    selectedCells.push(index);
-    cell.classList.add('selected');
-  }
-
-  // Combina as letras das células selecionadas
-  const selectedWord = selectedCells.map(i => letters[i]).join('');
-
-  // Verifica se a palavra está correta
-  if (rounds[currentRound].includes(selectedWord) && !foundWords.includes(selectedWord)) {
-    foundWords.push(selectedWord);
-
-    // Atualiza a lista de palavras encontradas
-    document.querySelectorAll('.words li').forEach(item => {
-      if (item.textContent === selectedWord) {
-        item.classList.add('found');
-      }
-    });
-
-    // Marca as células como encontradas
-    selectedCells.forEach(i => {
-      const selectedCell = document.querySelector(`[data-index='${i}']`);
-      selectedCell.classList.add('found');
-    });
-
-    selectedCells = []; // Reseta a seleção
-  }
-}
-
-function setupTouchEvents() {
-  const board = document.getElementById('board');
-  let isDragging = false;
-
-  board.addEventListener('mousedown', () => isDragging = true);
-  board.addEventListener('mouseup', () => isDragging = false);
-  board.addEventListener('mouseleave', () => isDragging = false);
-
-  board.addEventListener('mousemove', event => {
-    if (isDragging && event.target.dataset.index) {
-      selectCell(event);
-    }
-  });
-
-  board.addEventListener('touchstart', event => {
-    isDragging = true;
-    const touch = event.touches[0];
-    const target = document.elementFromPoint(touch.clientX, touch.clientY);
-    if (target && target.dataset.index) {
-      selectCell({ target });
-    }
-  });
-
-  board.addEventListener('touchmove', event => {
-    if (isDragging) {
-      const touch = event.touches[0];
-      const target = document.elementFromPoint(touch.clientX, touch.clientY);
-      if (target && target.dataset.index) {
-        selectCell({ target });
-      }
-    }
-  });
-
-  board.addEventListener('touchend', () => isDragging = false);
-}
-
-setupBoard();
-setupTouchEvents();
 
   setupBoard();
 </script>
