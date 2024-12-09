@@ -441,6 +441,97 @@
     modal.classList.remove('show');
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function selectCell(event) {
+  const cell = event.target;
+  const index = parseInt(cell.dataset.index);
+
+  // Se a célula já estiver selecionada, remova-a
+  if (selectedCells.includes(index)) {
+    cell.classList.remove('selected');
+    selectedCells = selectedCells.filter(i => i !== index);
+    return;
+  }
+
+  // Adicione a célula à seleção
+  if (selectedCells.length === 0 || isValidSelection(index)) {
+    selectedCells.push(index);
+    cell.classList.add('selected');
+  }
+
+  // Formar a palavra baseada nas células selecionadas
+  const selectedWord = selectedCells.map(i => letters[i]).join('');
+
+  // Verificar se a palavra está correta
+  if (rounds[currentRound].includes(selectedWord) && !foundWords.includes(selectedWord)) {
+    foundWords.push(selectedWord);
+
+    // Marcar a palavra como encontrada na lista
+    document.querySelectorAll('.words li').forEach(item => {
+      if (item.textContent === selectedWord) {
+        item.classList.add('found');
+      }
+    });
+
+    // Marcar as células como encontradas
+    selectedCells.forEach(i => {
+      const selectedCell = document.querySelector(`[data-index='${i}']`);
+      selectedCell.classList.add('found');
+    });
+
+    selectedCells = []; // Resetar a seleção
+  }
+}
+
+// Verificar se a seleção está em linha reta
+function isValidSelection(index) {
+  if (selectedCells.length < 1) return true;
+
+  const firstIndex = selectedCells[0];
+  const lastIndex = selectedCells[selectedCells.length - 1];
+
+  const firstRow = Math.floor(firstIndex / gridSize);
+  const firstCol = firstIndex % gridSize;
+  const lastRow = Math.floor(lastIndex / gridSize);
+  const lastCol = lastIndex % gridSize;
+  const currentRow = Math.floor(index / gridSize);
+  const currentCol = index % gridSize;
+
+  // Verificar alinhamento: mesma linha, mesma coluna ou diagonal
+  const isSameRow = firstRow === currentRow && lastRow === currentRow;
+  const isSameCol = firstCol === currentCol && lastCol === currentCol;
+  const isDiagonal =
+    Math.abs(currentRow - firstRow) === Math.abs(currentCol - firstCol) &&
+    Math.abs(currentRow - lastRow) === Math.abs(currentCol - lastCol);
+
+  return isSameRow || isSameCol || isDiagonal;
+}
+
+
   setupBoard();
 </script>
 
