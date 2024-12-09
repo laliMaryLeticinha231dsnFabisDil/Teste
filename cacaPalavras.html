@@ -199,55 +199,71 @@
     @media screen and (max-width: 720px) {
   .titulo-caca-palavra,
   .palavras {
-    display: none; /* Esconde elementos desnecessários em telas pequenas */
+    display: none; /* Esconde elementos grandes */
+  }
+
+  .words-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2vh;
+    padding: 0 5vw; /* Espaçamento nas laterais */
   }
 
   .words {
     display: flex;
-    justify-content: center; /* Centraliza as palavras */
-    flex-wrap: wrap; /* Permite quebra de linha */
-    font-size: 2vh;
-    gap: 1vh; /* Espaço entre as palavras */
-    text-align: center;
+    flex-wrap: wrap;
+    gap: 0.8rem; /* Espaço entre palavras */
+    font-size: 1.6vh; /* Texto menor para telas pequenas */
+    justify-content: center;
   }
 
   .game-container {
-    margin-top: 2vh; /* Margem superior para respiro visual */
-    width: 100%; /* Ajusta a largura para 100% da tela */
-    max-width: 90vw; /* Limita a largura para não ultrapassar os limites da tela */
-    display: flex;
     flex-direction: column;
-    align-items: center; /* Garante que o conteúdo seja centralizado */
-    justify-content: center; /* Garante o alinhamento central também */
-    padding: 0 5vw; /* Adiciona espaçamento nas laterais para não colar no limite */
+    width: 80%; /* Ocupa a largura total */
+    height: auto;
+    padding: 1rem;
+    box-shadow: none; /* Remove sombras em telas pequenas */
+  }
+
+  .board-container {
+    width: 100%; /* Ocupa todo o espaço horizontal */
+    max-width: 90vw; /* Evita ultrapassar os limites */
   }
 
   .board {
-    display: grid;
-    width: 100%; /* Garante que a largura do tabuleiro ocupe 100% da largura disponível */
-    max-width: 55vh; /* Limita a largura do tabuleiro */
-    height: auto; /* Permite que a altura se ajuste */
-    grid-template-columns: repeat(9, 1fr); /* Grade com 9 colunas */
-    grid-gap: 0.2rem; /* Espaço entre os blocos */
+    grid-template-columns: repeat(9, 1fr); /* 9 colunas para facilitar leitura */
+    gap: 0.3rem; /* Maior espaço entre as células */
+    width: 100%;
+    max-width: 65vw; /* Limita o tamanho */
   }
 
   .board div {
-    width: 4vh; /* Tamanho das células adaptado */
-    height: 4vh;
-    font-size: 2vh; /* Texto proporcional ao tamanho das células */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f0f0f0; /* Fundo para visualização clara */
-    border-radius: 4px; /* Bordas arredondadas para melhorar o visual */
-    transition: background-color 0.3s, transform 0.2s ease;
+    width: 3.5vh; /* Células menores */
+    height: 3.5vh;
+    font-size: 1.5vh;
+    border-radius: 4px;
   }
 
   .board div:hover {
-    background-color: #d1e7ff; /* Destaque ao passar o mouse */
-    transform: scale(1.05); /* Leve zoom ao passar o mouse */
+    transform: scale(1.05); /* Zoom leve */
+    background-color: #d1e7ff;
+  }
+
+  button {
+    width: 80%; /* Botão adaptado para telas pequenas */
+    padding: 0.6rem;
+    font-size: 1rem;
+    margin-top: 1rem;
+    border-radius: 5px;
+  }
+
+  .modal-content {
+    width: 90%; /* Modal mais compacto */
+    font-size: 0.9rem;
   }
 }
+
   </style>
 </head>
 
