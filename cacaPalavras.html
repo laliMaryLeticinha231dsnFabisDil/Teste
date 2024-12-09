@@ -232,7 +232,7 @@
   }
 
   .board {
-    grid-template-columns: repeat(9, 2fr); /* 9 colunas para facilitar leitura */
+    grid-template-columns: repeat(12, 7fr); /* 9 colunas para facilitar leitura */
     gap: 0.3rem; /* Maior espaço entre as células */
     width: 100%;
     max-width: 85vw; /* Limita o tamanho */
@@ -303,9 +303,9 @@
   const rounds = [
     ["ESTUDAR", "JOGO", "LIVRO", "ESCOLA", "LAPIS", "TESOURA", "REGUA", "CANETA"],
     ["BIBLIOTECA", "SALA", "CADERNO", "BORRACHA", "FLOR", "GIRASSOL", "OCULOS", "VESTIDO"],
-    ["LIXO", "SACOLA", "FRUTA", "MASCARA", "PIANO", "CILIOS", "CHUVA"],
-    ["TROVAO", "RAIO", "LARANJA", "UVA", "MORANGO", "ABACAXI", "PERA", "MANGA"],
-    ["CABELO", "UNHA", "ALUNO", "PROFESSOR", "MATERIA", "LIVRO", "AULA", "SORRISO"]
+    // ["LIXO", "SACOLA", "FRUTA", "MASCARA", "PIANO", "CILIOS", "CHUVA"],
+    // ["TROVAO", "RAIO", "LARANJA", "UVA", "MORANGO", "ABACAXI", "PERA", "MANGA"],
+    // ["CABELO", "UNHA", "ALUNO", "PROFESSOR", "MATERIA", "LIVRO", "AULA", "SORRISO"]
   ];
 
   const gridSize = 12;
@@ -402,18 +402,12 @@
       });
 
       selectedCells.forEach(i => {
-        const selectedCell = document.querySelector([data-index='${i}']);
+        const selectedCell = document.querySelector(`[data-index='${i}']`);
         selectedCell.classList.add('found');
       });
 
       selectedCells = [];
     }
-  }
-  function showModal(message) {
-    const modal = document.getElementById('modal');
-    const modalMessage = document.getElementById('modal-message');
-    modalMessage.textContent = message;
-    modal.classList.add('show');
   }
 
   function nextRound() {
@@ -441,9 +435,29 @@
     modal.classList.remove('show');
   }
 
+
+
+  function canPlaceWord(row, col, direction, word) {
+  for (let i = 0; i < word.length; i++) {
+    const newRow = row + (direction === 0 ? i : direction === 2 ? i : 0);
+    const newCol = col + (direction === 1 ? i : direction === 2 ? i : 0);
+
+    // Verifica se a palavra ultrapassa os limites do grid
+    if (
+      newRow < 0 || newCol < 0 || // Fora do grid
+      newRow >= gridSize || newCol >= gridSize || // Ultrapassa o grid
+      (direction === 1 && col + word.length > gridSize) || // Ultrapassa a borda direita (horizontal)
+      letters[getIndex(newRow, newCol)] !== '' // Sobreposição de letras
+    ) {
+      return false;
+    }
+  }
+  return true;
+}
+
   setupBoard();
 </script>
 
 </body>
 
-</html> 
+</html>
