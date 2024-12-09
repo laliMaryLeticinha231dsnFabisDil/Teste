@@ -197,35 +197,57 @@
     }
 
     @media screen and (max-width: 720px) {
+  .titulo-caca-palavra,
+  .palavras {
+    display: none; /* Esconde elementos desnecessários em telas pequenas */
+  }
 
-      .titulo-caca-palavra,
-      .palavras {
-        display: none;
-      }
+  .words {
+    display: flex;
+    justify-content: center; /* Centraliza as palavras */
+    flex-wrap: wrap; /* Permite quebra de linha */
+    font-size: 2vh;
+    gap: 1vh; /* Espaço entre as palavras */
+    text-align: center;
+  }
 
-      .words {
-        justify-content: space-between;
-        flex-wrap: wrap;
-        display: flex;
-        font-size: 2vh;
-        gap: 1vh;
-      }
-      .game-container{
-        margin-top: 4vh;
-        width: 53vh;
-      }
-      .board{
-        width: 55vh;
-        height: 80vh;
-        grid-template-columns: repeat(9, 2.6rem);
-      }
-      .board div{
-        width: 4vh;
-        height: 4vh;
-        gap: 0.15vh;
-        font-size: 2vh;
-      }
-    }
+  .game-container {
+    margin-top: 2vh; /* Margem superior para respiro visual */
+    width: 100%; /* Ajusta a largura para 100% da tela */
+    max-width: 90vw; /* Limita a largura para não ultrapassar os limites da tela */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Garante que o conteúdo seja centralizado */
+    justify-content: center; /* Garante o alinhamento central também */
+    padding: 0 5vw; /* Adiciona espaçamento nas laterais para não colar no limite */
+  }
+
+  .board {
+    display: grid;
+    width: 100%; /* Garante que a largura do tabuleiro ocupe 100% da largura disponível */
+    max-width: 55vh; /* Limita a largura do tabuleiro */
+    height: auto; /* Permite que a altura se ajuste */
+    grid-template-columns: repeat(9, 1fr); /* Grade com 9 colunas */
+    grid-gap: 0.2rem; /* Espaço entre os blocos */
+  }
+
+  .board div {
+    width: 4vh; /* Tamanho das células adaptado */
+    height: 4vh;
+    font-size: 2vh; /* Texto proporcional ao tamanho das células */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0; /* Fundo para visualização clara */
+    border-radius: 4px; /* Bordas arredondadas para melhorar o visual */
+    transition: background-color 0.3s, transform 0.2s ease;
+  }
+
+  .board div:hover {
+    background-color: #d1e7ff; /* Destaque ao passar o mouse */
+    transform: scale(1.05); /* Leve zoom ao passar o mouse */
+  }
+}
   </style>
 </head>
 
