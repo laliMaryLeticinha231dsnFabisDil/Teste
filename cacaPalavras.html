@@ -232,7 +232,7 @@
   }
 
   .board {
-    grid-template-columns: repeat(9, 2fr); /* 9 colunas para facilitar leitura */
+    grid-template-columns: repeat(8, 1fr); /* 9 colunas para facilitar leitura */
     gap: 0.3rem; /* Maior espaço entre as células */
     width: 100%;
     max-width: 85vw; /* Limita o tamanho */
@@ -458,79 +458,81 @@
 
 
 
-
-
-
-
-
-
-
-
-function selectCell(event) {
+  function selectCell(event) {
   const cell = event.target;
   const index = parseInt(cell.dataset.index);
 
-  // Se a célula já estiver selecionada, remova-a
+  // Adiciona ou remove a célula selecionada
   if (selectedCells.includes(index)) {
     cell.classList.remove('selected');
     selectedCells = selectedCells.filter(i => i !== index);
-    return;
-  }
-
-  // Adicione a célula à seleção
-  if (selectedCells.length === 0 || isValidSelection(index)) {
+  } else {
     selectedCells.push(index);
     cell.classList.add('selected');
   }
 
-  // Formar a palavra baseada nas células selecionadas
+  // Combina as letras das células selecionadas
   const selectedWord = selectedCells.map(i => letters[i]).join('');
 
-  // Verificar se a palavra está correta
+  // Verifica se a palavra está correta
   if (rounds[currentRound].includes(selectedWord) && !foundWords.includes(selectedWord)) {
     foundWords.push(selectedWord);
 
-    // Marcar a palavra como encontrada na lista
+    // Atualiza a lista de palavras encontradas
     document.querySelectorAll('.words li').forEach(item => {
       if (item.textContent === selectedWord) {
         item.classList.add('found');
       }
     });
 
-    // Marcar as células como encontradas
+    // Marca as células como encontradas
     selectedCells.forEach(i => {
       const selectedCell = document.querySelector(`[data-index='${i}']`);
       selectedCell.classList.add('found');
     });
 
-    selectedCells = []; // Resetar a seleção
+    selectedCells = []; // Reseta a seleção
   }
 }
 
-// Verificar se a seleção está em linha reta
-function isValidSelection(index) {
-  if (selectedCells.length < 1) return true;
+function setupTouchEvents() {
+  const board = document.getElementById('board');
+  let isDragging = false;
 
-  const firstIndex = selectedCells[0];
-  const lastIndex = selectedCells[selectedCells.length - 1];
+  board.addEventListener('mousedown', () => isDragging = true);
+  board.addEventListener('mouseup', () => isDragging = false);
+  board.addEventListener('mouseleave', () => isDragging = false);
 
-  const firstRow = Math.floor(firstIndex / gridSize);
-  const firstCol = firstIndex % gridSize;
-  const lastRow = Math.floor(lastIndex / gridSize);
-  const lastCol = lastIndex % gridSize;
-  const currentRow = Math.floor(index / gridSize);
-  const currentCol = index % gridSize;
+  board.addEventListener('mousemove', event => {
+    if (isDragging && event.target.dataset.index) {
+      selectCell(event);
+    }
+  });
 
-  // Verificar alinhamento: mesma linha, mesma coluna ou diagonal
-  const isSameRow = firstRow === currentRow && lastRow === currentRow;
-  const isSameCol = firstCol === currentCol && lastCol === currentCol;
-  const isDiagonal =
-    Math.abs(currentRow - firstRow) === Math.abs(currentCol - firstCol) &&
-    Math.abs(currentRow - lastRow) === Math.abs(currentCol - lastCol);
+  board.addEventListener('touchstart', event => {
+    isDragging = true;
+    const touch = event.touches[0];
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (target && target.dataset.index) {
+      selectCell({ target });
+    }
+  });
 
-  return isSameRow || isSameCol || isDiagonal;
+  board.addEventListener('touchmove', event => {
+    if (isDragging) {
+      const touch = event.touches[0];
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (target && target.dataset.index) {
+        selectCell({ target });
+      }
+    }
+  });
+
+  board.addEventListener('touchend', () => isDragging = false);
 }
 
+setupBoard();
+setupTouchEvents();
 
   setupBoard();
 </script>
